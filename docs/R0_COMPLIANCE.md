@@ -1,132 +1,61 @@
+# R0 — Competition, Sources and Responsible AI Compliance
 
-# R0 — Competition and Compliance Review
+**Snapshot:** 2026-11-14 · Asia/Almaty
+**Challenge:** NASA Space Apps Challenge 2026, *Flame in Freefall*
+**Project:** VERGE — NASA Edition; one registered human participant, AI assistant not a human teammate.
 
-Project: Stellar Anvil / VERGE-NASA Edition
-Date: 2026-11-14
-Timezone: Asia/Almaty
+## Event and submission
 
-## Competition
+- Official 2026 event: https://www.spaceappschallenge.org/2026/
+- Challenge details: https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/
+- Competition window: 14–15 November 2026.
+- Global project submission is due **2026-11-15 23:59, participant-local time** under the official 2026 schedule. Submission occurs via the event Project Tab; a GitHub commit or Streamlit deployment is not itself a submission.
+- Local Almaty event judging / mandatory attendance: **confirm directly with the local organizer**; do not substitute the global deadline for the local presentation cutoff.
+- Follow current Project Submission Guide: https://www.spaceappschallenge.org/resources/project-submission-guide/.
 
-Challenge: Flame in Freefall
-Event: NASA Space Apps Challenge 2026
+## Required Challenge Resource — BLOCKING OPEN ITEM
 
-Local event start: 2026-11-14 10:00
-Global submission deadline: 2026-11-15 23:59
+NASA Space Apps GO Team states Global Awards eligibility requires **at least one NASA data source explicitly listed in the chosen challenge's Resources**. Merely citing any valid NASA report is insufficient.
 
-Official challenge:
-https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/
+- Official target: https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/?tab=resources
+- Current status: **PENDING DIRECT MANUAL CONFIRMATION** for FLEX/PSI-69 and/or BASS-II/PSI-25 (or an official listed NASA source demonstrably used in the submission).
+- Required evidence before R0 closure: record the exact resource title and original URL as it appears on the official tab; identify which actual VERGE dataset or finding uses it.
 
-Participant terms:
-https://www.spaceappschallenge.org/legal/
+## Scientific sources and rights
 
-## Challenge Resources
+- FLEX: NASA NTRS 20150023456, `NASA/TP-2015-216046` — NTRS **Public Use Permitted**. Reference individual report/PSI identifiers, source tables, page and figure anchors; the PSI metadata license does not automatically cover images and every linked item.
+- BASS-II: NASA NTRS 20210011385, `NASA/TM-20210011385` — NTRS displays **“Use by or on behalf of the US Gov. Permitted”**, not a general CC0 report license. The public project provides links and a limited cited table of factual values; do not redistribute the complete report PDF, its figures or videos without rights review.
+- Project code: Apache-2.0, see `LICENSE`; no license is asserted over NASA/third-party assets.
+- Avoid NASA marks or statements of endorsement. Include "independent project; not affiliated with or endorsed by NASA" wording.
 
-Official resources:
-https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/?tab=resources
+## Source and scientific honesty
 
-Manual comparison with the official page:
-PENDING
+NASA-DAP v1.0 governs source identity, extraction, QC and D7 releases. NASA-EVP v1.0 governs atomized proof obligations, independent verification, counterexamples where feasible, scientific verdict and regression test. Preserve raw units, missingness, source locators and fields blocked from numerical physical use. No ISS-to-Moon/Mars inference, general fire-risk predictions or certification.
 
-Required resource selected:
-NASA Physical Sciences Informatics (PSI)
+**Current implementation limitations:** BASS-II covers 6 *methods-specific* values, not independent experiments; full FLEX 284-test corpus is not incorporated. D4 `VERIFIED` remains separate from NASA-EVP `SUPPORTED`. `ERROR` denotes a technical failure and has no scientific verdict.
 
-Primary investigation:
-FLEX / PSI-69
+## AI disclosure
 
-Secondary investigation:
-BASS-II / PSI-25
+- OpenAI ChatGPT (GPT-6) assisted with architecture, research, code/documentation drafts, debugging and proposed test design.
+- Human participant made the scientific and implementation decisions, applied changes and executed independent local tests.
+- **No LLM model currently runs inside the deployed application**; no live model-generated scientific interpretation is claimed.
+- Explicitly list ChatGPT among tools on the NASA project submission page and point to `docs/AI_DISCLOSURE.md`.
+- Any future generated assets or LLM adapter must be individually disclosed; secrets must never be committed to the public repository.
 
-Use at least one NASA source from the official
-Challenge Resources list.
+## Security and public distribution
 
-## Scientific Source Rights
+- `.env`, Streamlit `secrets.toml`, `.venv` and original heavyweight NASA PDF inputs excluded from tracked deliverables.
+- Before GitHub public push inspect tracked files for tokens, credentials and private data; check Git commit author metadata if personal email exposure matters.
+- Public page must work without API keys; current deterministic mode is designed for that.
+- Repository and app URLs must be independently opened in a logged-out browser to confirm public access.
 
-FLEX PSI-69:
-CC0-1.0 (PSI investigation metadata)
+## Final R0 state
 
-FLEX NASA/TP-2015-216046:
-NTRS: Public Use Permitted
+- Development after official start: locally reported, source dates align with 14 November 2026.
+- Scientific-source identity: **VERIFIED within bounded releases**.
+- AI disclosure: **DOCUMENTED**; submission entry pending.
+- License/reuse: **LIMITED REVIEW**; BASS-II redistribution restrictions remain relevant.
+- Required challenge-resource membership: **PENDING**.
+- Submission and public links: **PENDING**.
 
-BASS-II NASA/TM-20210011385:
-Public report available; individual NTRS rights
-field not independently reconfirmed.
-
-NASA source documents remain attributed to NASA.
-Linked third-party publications retain their own rights.
-
-No wholesale redistribution of original NASA PDFs
-or unreviewed third-party media is planned.
-
-## Project License
-
-Proposed original-code license: Apache-2.0
-
-Third-party library licenses are independent of
-the project license.
-
-Python dependencies:
-- Streamlit: Apache-2.0
-- Pandas: BSD-3-Clause
-- Plotly: MIT
-- Pytest: MIT
-- pdfplumber: MIT
-
-Transitive dependency notices require review
-before public distribution.
-
-## AI Disclosure
-
-AI assistant: OpenAI ChatGPT / GPT-6
-Usage period: November 2026
-
-AI assistance includes:
-- Architecture and planning
-- Python code drafting
-- Documentation drafting
-- Scientific research assistance
-- Debugging and test design
-
-The human participant is responsible for:
-- Reviewing and applying code
-- Executing tests
-- Scientific data verification
-- Project decisions
-- Final submission
-
-AI-generated code and data must be identified
-in project documentation and relevant metadata.
-
-AI-generated images and videos require visible
-AI-generation markings.
-
-No generated NASA branding or logos are used.
-
-## Scientific Integrity
-
-NASA-DAP v1.0 governs data extraction.
-NASA-EVP v1.0 governs scientific claims.
-
-No unsupported safety certification is claimed.
-No automatic transfer of ISS results to lunar or
-Martian gravity is permitted.
-
-## Submission Controls
-
-- Project content: English
-- Local oral defense: Russian permitted
-- Public links: accessible without authentication
-- All scientific and software sources attributed
-- AI assistance disclosed
-- Demo: follow current official submission guide
-
-## R0 Gate
-
-Technical bootstrap: VERIFIED
-Documentation: PENDING FINAL COMMIT
-Official Resource membership: PENDING MANUAL CHECK
-Licensing policy: REVIEWED
-
-Final status: CONDITIONAL GO
-
-R1 begins after official Resource membership
-is confirmed and the R0 commit passes checks.
+**R0 FULL CLOSURE: NOT YET CONFIRMED.**

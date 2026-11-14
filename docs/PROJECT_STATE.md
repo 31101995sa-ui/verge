@@ -1,114 +1,77 @@
-# Stellar Anvil — PROJECT_STATE
+# PROJECT_STATE — VERGE-NASA Edition
 
-Project: VERGE-NASA Edition  
-Challenge: NASA Space Apps Challenge 2026 — Flame in Freefall  
-Snapshot date: 2026-11-14  
-Timezone: Asia/Almaty  
-Official participant: one human developer; ChatGPT is an AI assistant  
-Development mode: M2 — Accelerated Pair Programming
+**Snapshot date:** 2026-11-14 · **Timezone:** Asia/Almaty
+**Scope:** Phase B.2 deployment-readiness preparation, after R5.3 and Scientific Mission Control UI.
 
 ## CURRENT GATE
 
-- **R0:** Development bootstrap completed. Formal official Challenge Resources, permissions, attribution and submission compliance review remains open.
-- **R1:** Bounded NASA-DAP D0–D7 FLEX sample released and integrated.
-- **R2:** Explorer implementation, regression and browser display completed; Git commit `b5d8ac8`.
-- **R3:** Deterministic retrieval, explainable rank and Evidence Search UI implemented; Git commit `9ca81cd`.
-- **R4.1–R4.5:** Structured source transcription, field restrictions, Decimal unit equivalence, scientific scope guards and 18-case pre-registered benchmark implemented and tested locally.
-- **R4.6:** Streamlit Evidence Verification and session Evidence Ledger integrated. After an unsaved-file/duplicate-tail incident, developer reports corrected file and passing tests; a complete seven-scenario browser checklist and R4 Git commit have not been supplied.
-- **Next bounded feature:** R4.7, a strictly constrained, fail-closed English transcription parser; not general natural-language verification.
-- **Global status:** IN DEVELOPMENT; **NOT READY FOR SUBMISSION**.
+**Phase B.2 — reproducible public-deployment package; not yet deployed.** The previous Phase A Scientific Mission Control UI is locally functional. Phase C GitHub / public Streamlit URL and optional runtime LLM are separate, uncompleted gates.
 
-## VERIFIED — DEVELOPER-SIDE EXECUTION
+## VERIFIED (actual observations)
 
-- Python 3.12.10, `.venv`, Streamlit, Pandas, Plotly, Pytest, Git and VS Code established earlier.
-- R2 final local regression: `22 passed in 1.12s`, followed by Git `b5d8ac8`.
-- R3 retrieval and ranking final local regression: `39 passed in 1.41s`; Streamlit Evidence Search manually confirmed working; Git `9ca81cd`.
-- R4.1 local: `48 passed in 1.70s` including nine oxygen-verifier tests.
-- R4.2 local: `62 passed in 1.94s` including 14 field-block tests.
-- R4.3a local: `73 passed in 2.19s` including 11 unit-conversion tests.
-- R4.3b local: `87 passed in 2.26s` including 14 scope-guard tests.
-- R4.4–R4.5 local: `102 passed in 2.78s`, 15 new tests; `python -m benchmarks.run_r4_benchmark --output artifacts/r4_benchmark_v0.1.json` produced **18/18 PASS** with 17 scientific verdicts and one simulated technical `ERROR` / no verdict.
-- R4.6: developer reported `115 passed in 3.41s` during debugging; that same run did not guarantee valid `app.py` (unsaved changes). Developer subsequently explicitly reported that the file was saved, duplicate entry point removed, and tests passed. Exact later stdout and complete browser verification not independently observed in this chat.
-- Independent Python prototype results are supplementary only; local developer results above are authoritative for project status.
+- Git HEAD in the uploaded archive: **`906e1ca`**, `feat: integrate BASS-II verification and Mission Control UI` (35-file milestone).
+- Archived working-tree source independently executed under Python: **206/206 Pytest PASS**, FLEX 18/18 scientific benchmark, BASS-II 10/10 benchmark. **A separate clean clone of HEAD `906e1ca` failed BASS-II hash checks because Git had normalized CRLF bytes in two source CSVs; this is the specific issue the Phase B.2 `.gitattributes` and byte-preserving Git restaging must fix.**
+- Standalone FLEX D7 validator PASS (17 unique records, 10 `VERIFIED`, 7 `REVIEW`, immutable CSV hash checks).
+- Standalone BASS-II D7 validator PASS (2 source rows; 6 method-specific cells; 6 QC matches; raw string and unit/uncertainty checks).
+- Human developer previously confirmed the UI's six-tab layout, correct `app.py` SHA-256, Pytest 206/206, FLEX 18/18 and BASS-II 10/10 locally.
+- No successful GitHub push, clean remote clone, fresh cloud installation or public browser smoke test has been observed.
 
-## SCIENTIFIC RELEASE / DATA PROVENANCE
+## IMPLEMENTED
 
-- Release: `FLEX-R1-SAMPLE-20261114-v1.0` (immutable 17-record FLEX sample; not the entire investigation).
-- Source: NASA/TP-2015-216046; NTRS `20150023456`; FLEX PSI-69; Table IX with experiment ID, printed/PDF pages, raw/curated/QC source anchors.
-- D4 statuses: 10 `VERIFIED` **for limited lookup**, 7 `REVIEW`; neither is a NASA-EVP claim verdict.
-- FLEX-034: raw extinction-droplet diameter `2` mm; Table IX versus Figure 38 documentary conflict; physical numeric use blocked.
-- FLEX-114: raw ambient pressure `0` mmHg; physical pressure analysis blocked.
-- FLEX-004 / FLEX-009: source `–` is missingness, not numerical zero.
-- FLEX-039: source literal `0` retained but extinction-diameter interpretation blocked.
-- D5 count entities: author-reported 284 tests, 276 Table IX rows, older PSI count 275; reconciliation partially unresolved, not confirmed NASA errors.
-- Only bounded source-cell claims can receive `SUPPORTED`; no universal causal/threshold claims, spacecraft safety certification, fire-risk prediction or Moon/Mars extrapolation under this release.
-- BASS-II / PSI-25: not integrated into the active FLEX verifier; do not mix physically non-comparable studies.
+- **R1 FLEX D7**: NASA/TP-2015-216046 Table IX, 17 bounded source-linked records, raw/curated/QC, D0–D7 manifests and restrictions.
+- **R2 Explorer**: filters, source inspection, categorical composition and localized Plotly charts.
+- **R3 Search/Rank**: deterministic lexical retrieval and explainable relevance scores; not scientific confidence.
+- **R4 FLEX EVP**: structured source-cell/scope verification, constrained English Table IX parser with human confirmation, session Evidence Ledger and JSON export. Technical `ERROR` is separate from a scientific verdict.
+- **R5 BASS-II D7**: NASA/TM-20210011385 Table 2.1, 2 nominal O₂ conditions, 6 distinct method-specific values, manifest validation and separate structured verification / Evidence Ledger.
+- **Phase A Scientific Mission Control**: dark native Streamlit theme, Overview/Explore/Search/Verify/Evidence Ledger/Methods navigation, EN/RU display without translating NASA identifiers or units.
 
-## R4 EVIDENCE CONTRACT
+## NOT IMPLEMENTED / NOT YET VERIFIED
 
-- Contract: `FLEX_R3_R4_Evidence_Contract_v0.1.md`; scientific cases: `FLEX_R3_R4_Proposed_Claims_v0.1.json`.
-- NASA-EVP verdicts: `SUPPORTED`, `CONTRADICTED`, `INSUFFICIENT_EVIDENCE`, `OUT_OF_SCOPE`; technical `ERROR` is separate and has no verdict.
-- Structured router does not parse free-text claims. Statement classes are selected explicitly by the caller.
-- Reported source-cell values and source units are compared deterministically using Decimal and bounded supported conversions.
-- Blocked fields remain discoverable and may support **literal transcription only** with QC warnings; numerical physical interpretation abstains.
-- R4.5 expected statuses were predeclared. Local benchmark **18/18 PASS** demonstrates those cases only; not exhaustive scientific correctness.
-- R4.6 session ledger exports observed structured claims, proof checks, verdicts and source anchors as JSON. In-memory until exported; not cryptographically tamper-proof.
-- `claim_text = null`, `counterexamples_checked = false` and no LLM verification for current R4.6.
+- **R6**: no runtime LLM API/adapter, no automatic free-form source-grounded synthesis/interpretation, no autonomous counterexample search; an LLM cannot self-issue NASA-EVP `SUPPORTED`.
+- **R7**: frozen 18 FLEX and 10 BASS-II case suites are verified, but comprehensive public-browser/cold-clone testing, unqualified baseline comparisons, and all acceptance evidence are not complete.
+- **R8**: no public URL, verified GitHub repo, recorded demo, final presentation or submission receipt.
+- **R0**: NASA 2026 challenge *Resources* membership for a source actively used by the project remains **PENDING DIRECT VERIFICATION**; current reuse/attribution and AI disclosures documented but must be reviewed for submission.
 
-## CURRENT WORKING FILES
+## SCIENTIFIC RESTRICTIONS
 
-- `app.py`: Streamlit R2 Explorer, R3 Evidence Search and R4.6 Verification UI.
-- `src/flex_d7_loader.py`: manifest-checked release loader.
-- `src/explorer_filters.py`, `src/explorer_charts.py`: bounded filtering and charts.
-- `src/retrieval.py`, `src/ranking.py`: deterministic lexical source-linked retrieval/rank.
-- `src/evidence_verifier.py`, `src/field_evidence.py`: source-cell checks, missingness and QC gates.
-- `src/unit_rules.py`, `src/scope_gate.py`: Decimal unit conversion and restricted scope policy.
-- `src/claim_router.py`: structured NASA-EVP dispatch with independent release validation.
-- `src/evidence_ledger.py`, `src/verification_ui.py`: session ledger and Streamlit verification panel.
-- `benchmarks/r4_claim_inputs.py`, `benchmarks/run_r4_benchmark.py`, `benchmarks/FLEX_R3_R4_Proposed_Claims_v0.1.json`: frozen scientific scenarios and runner.
-- `tests/`: previously executed loader, explorer, retrieval, ranking, verification, scope, benchmark and ledger regression tests.
-- `artifacts/r4_benchmark_v0.1.json`: developer-produced observed benchmark report; ensure it is preserved, but do not confuse it with the frozen benchmark input fixture.
-- `data/releases/FLEX-R1-SAMPLE-20261114-v1.0/`: immutable scientific inputs and QC documentation.
+FLEX is droplet combustion; BASS-II is solid-fuel combustion. Never merge their physics quantitatively. D4 QC `VERIFIED` is not NASA-EVP `SUPPORTED`. Distinguish raw literals (`0`, `–`, blank) and missingness. NASA/TP FLEX-034/114 remain restricted. BASS-II method categories (`EXPERIMENTAL`, `COMPUTATIONAL_MODEL`, `ANALYTICAL_MODEL`) and ±5 experimental uncertainty stay distinct; model uncertainty is not reported. BASS-II Table 2.1 versus §2.2.5, and unique as-run test ID mapping, remain unresolved. No Moon/Mars partial-gravity prediction, general safe ventilation threshold or certification is permitted.
 
-## GIT — OBSERVED
+## FILES + COMMIT
 
-- Branch `main`; last confirmed HEAD: `9ca81cd feat: complete FLEX R3 evidence search and ranking`.
-- R4 source/tests/app have **not** been confirmed committed.
-- Last known unrelated working-tree changes: `requirements.txt` modification removing `pymupdf4llm` and `pymupdf_layout` pins (reason unverified); seven legacy audit artifacts untracked under the D7 release folder.
-- Remote / push status: NOT VERIFIED.
-- Preserve R4 benchmark report. Review `.gitignore` and artifact disposition before staging generated outputs.
-- Do not use `git add .` until unrelated changes have been reviewed.
+- Last verified Git HEAD from archive: **`906e1ca`** (branch `main`).
+- Phase B.2 package proposes documentation, `.gitignore` and minimal deployment dependencies only. **Not committed in the developer's repository**.
+- Raw D7 CSVs and scientific manifest contents must remain byte-identical.
+- Archive included seven optional historical FLEX audit files not tracked by Git; evaluate separately rather than bulk-staging.
+- Archive included an accidental-looking untracked file with a pasted Git command in its filename; verify before deleting or staging.
+- Archived `requirements.txt` had two unexplained removed optional PDF processing pins; Phase B.2 proposes a minimal, explicit runtime dependency list rather than reintroducing unused PDF libraries.
+- Archived Git metadata had no configured remote. Do not imply GitHub publication.
+- **Cold-clone blocker discovered in Phase B.2:** the published Git blobs of two BASS-II CSVs and two historical FLEX audit CSVs contained LF-normalized bytes rather than their SHA-256-verified working-tree CRLF bytes. Stage the unchanged original bytes under `.gitattributes` with `-text` before GitHub publication. This is a repository transport fix, not a scientific data correction.
 
-## OPEN ISSUES
+## RELEASE POLICY
 
-1. Final official Challenge Resources, use permissions, attribution, AI disclosure, and submission/demonstration requirements require current evidence-based R0 check.
-2. R4.6 seven-scenario browser smoke test not fully evidenced in local output; user reported corrected UI source and successful testing.
-3. R4 code and documentation not yet selectively committed; `PROJECT_STATE` local update pending.
-4. Current source-linked sample is 17 selected records and unfit for generalizable physical comparisons; D5 entity/count reconciliation remains open.
-5. Free-English claims, independent counterexample search, richer interpretation and durable server ledger are not implemented.
-6. `requirements.txt` unexplained diff and seven untracked legacy audit files require separate disposition.
-7. No complete submission, presentation/demo recording or official submission confirmation has been observed.
+1. Protect the known-good `906e1ca` baseline.
+2. Commit Phase B.2 documentation/configuration in a **separate selective commit** after local test run.
+3. Before publication inspect Git tracked files for credentials and personal author metadata; `.gitignore` is not a guarantee against already-tracked secrets.
+4. Deploy from reviewed GitHub `main` with `app.py` entrypoint and Python **3.12** via Streamlit Community Cloud.
+5. Confirm actual public URL and repeat 11 browser scenarios in a fresh session before release freeze.
+6. Conditional R6 LLM work only **after** public deployment and separate approval; deterministic verification remains the baseline.
 
-## DECISIONS
+## ISSUES
 
-- One official participant; AI assistance disclosed in source/documentation as applicable.
-- M2: one bounded change, full visible code, exact local test command and actual output, state plus Git checkpoint.
-- Do not rewrite completed scientific D7 CSV/manifest or silently normalize anomalous values.
-- Never derive NASA-EVP `SUPPORTED` from R3 ranking or D4 `VERIFIED` alone.
-- English app/README/submission; Russian internal technical collaboration and local verbal defense permitted where locally confirmed.
-- For R4.7 accept only strict source-transcription templates; reject ambiguous/free-form causal statements; show structured fields for confirmation; verifier always decides the claim status.
+1. **BLOCKER until fixed in Git:** clean clone of `906e1ca` corrupts byte-exact BASS-II CSV payloads via line-ending normalization; four unchanged source CSV blobs must be recommitted under `.gitattributes`.
+2. Current cloud install of minimized requirements not independently cold-tested; Linux/Python 3.12 build is pending.
+3. Official Challenge Resources membership and final competition project-submission requirements need direct page review.
+4. Legacy FLEX audit files are untracked; don't accidentally publish them.
+5. The source archive had widespread LF/CRLF Git noise; check `git diff --ignore-space-at-eol` before interpreting widespread changes.
+6. Public demonstration / links / submission are not complete.
 
 ## ONE NEXT ACTION
 
-1. Apply this state snapshot to `docs/PROJECT_STATE.md`, complete the R4.6 local browser checklist if not already done, and create a **selective R4 milestone Git commit** (R4 files, benchmark fixture, and state only; keep unrelated dependency/audit changes separate).
-2. Then begin R4.7 narrow English source-transcription parsing with a dedicated new module and tests; do not silently pass unsupported text as validated.
+Install the Phase B.2 package and `.gitattributes`; stage the **four original, byte-identical scientific CSVs** which Git previously normalized, while leaving their working-tree values untouched. Run the D7 validators and 206 tests in a **fresh Git clone** of the corrected commit as well as locally. Only then approve GitHub publication.
 
 ## EXIT CRITERION
 
-- R4 closeout: `python -m py_compile app.py` succeeds; 115 existing tests pass after saved change; 18/18 benchmark reconfirmed; structured verification UI and JSON export demonstrated; selective Git commit and actual hash reported.
-- R4.7 parser: only explicitly supported single-claim Table IX patterns produce a candidate with source locator; unsupported/ambiguous assertions abstain; separately executed source verifier produces scientific verdict; regression suite remains green.
-- Global submission readiness remains **NOT VERIFIED** until R7/R8 deliverables and compliance checks are completed.
+- Phase B.2: new documentation accurately describes R1–R5/Phase A; minimal dependencies and developer-test setup are coherent; D7 immutable and byte-preserved in Git; local **and clean-clone** tests green; selective Git commit and its hash observed.
+- Phase C: GitHub repository published and accessible; Streamlit URL opened successfully in an independent browser; source and verifier behavior checked end-to-end.
 
-## RELEASE STATUS
-
-**NOT READY FOR SUBMISSION** — implemented source-linked evidence exploration and bounded deterministic verification require final UI/compliance/packaging closure.
+**SUBMISSION STATUS: NOT YET RELEASE CANDIDATE.**

@@ -1,30 +1,34 @@
-
-# Python virtual environment
+# Python environments and caches
 .venv/
 venv/
-
-# Python cache
 __pycache__/
 *.py[cod]
-
-# Test and tool caches
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .coverage
 htmlcov/
 
-# Environment variables and API secrets
+# Credentials and local configuration
 .env
 .env.*
 !.env.example
 .streamlit/secrets.toml
+.streamlit/secrets.*.toml
+*.pem
 
-# Local editor and OS files
+# Editor / OS / local logs
 .vscode/
 .DS_Store
 Thumbs.db
+*.log
 
-# NASA raw data (tracked separately by source manifest)
+# Local transfer archives are not app dependencies
+*.rar
+*.7z
+*.zip
+
+# Original NASA source files belong outside the public app repository.
+# Versioned small D7 releases in data/releases/ remain tracked.
 data/raw/*
 !data/raw/.gitkeep

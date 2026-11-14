@@ -1,0 +1,7 @@
+# Scientific source payloads are immutable at the byte level.
+# Never normalize CRLF/LF or other data bytes on Git add/checkout.
+# Treat them as binary in diff to avoid false trailing-CR warnings.
+data/releases/*/* -text -diff
+
+# Frozen historical audit samples have SHA-256 regression checks too.
+data/audit/* -text -diff
