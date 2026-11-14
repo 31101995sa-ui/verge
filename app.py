@@ -10,6 +10,7 @@ import plotly.express as px
 from src.flex_d7_loader import RELEASE_ID, load_flex_d7_release
 from src.explorer_filters import filter_flex_records
 from src.explorer_charts import sample_category_counts
+from src.ranking import search_and_rank_flex
 
 
 RELEASE_DIR = (
@@ -68,6 +69,8 @@ def main() -> None:
         "safety thresholds, or predictions."
     )
 
+    # R3.3 — Search independently across the full D7 release.
+    render_evidence_search(records)
 
     # R2.2 — Interactive filters for source-linked experiments.
     st.subheader("Filter experiments")
@@ -134,7 +137,6 @@ def main() -> None:
         "Empty filter selections mean 'all'."
     )
 
-
     # Source-linked overview.
     display_columns = {
         "flex_test_id": "Test ID",
@@ -149,7 +151,6 @@ def main() -> None:
         "source_anchor": "NASA source locator",
     }
 
-    
     st.dataframe(
         filtered_records[list(display_columns)].rename(
             columns=display_columns
@@ -164,7 +165,6 @@ def main() -> None:
             "Try changing or clearing your selections."
         )
         st.stop()
-
 
     # R2.3 — Descriptive counts for the currently selected D7 records.
     st.subheader("Audited sample composition")
@@ -227,13 +227,10 @@ def main() -> None:
                 key=f"d7_count_{field}",
             )
 
-
-
     st.divider()
     st.subheader("Inspect a source record")
 
     # Allow inspection of individual experiments.
-    
     chosen_id = st.selectbox(
         "Experiment ID",
         options=filtered_records["flex_test_id"].tolist(),
@@ -358,6 +355,169 @@ def main() -> None:
             name: record[name]
             for name in raw_columns
         })
+
+
+def render_evidence_search(records) -> None:
+    """Display deterministic FLEX metadata search and source-linked results."""
+
+    st.divider()
+    st.subheader("Evidence Search — FLEX D7")
+
+    st.caption(
+        "Literal keyword search across 17 audited records. "
+        "All query terms must match within one record. "
+        "Ranking is lexical relevance, not scientific confidence "
+        "or verification."
+    )
+
+    query = st.text_input(
+        "Search experiment and QC metadata",
+        placeholder="e.g. FLEX-034 or Heptane VERIFIED",
+        key="r3_evidence_query",
+    )
+
+    if not query.strip():
+        st.caption(
+            "Enter one or more search terms to inspect "
+            "NASA-linked records."
+        )
+        return
+
+    results = search_and_rank_flex(records, query)
+
+    if results.empty:
+        st.info(
+            "No matching records in the bounded FLEX D7 release."
+        )
+        return
+
+    st.caption(
+        f"{len(results)} matching record(s) from the "
+        f"{len(records)}-record {RELEASE_ID} release."
+    )
+
+    display_columns = {
+        "ranking_position": "Rank",
+        "flex_test_id": "Experiment ID",
+        "fuel_raw": "Fuel (raw)",
+        "test_end_raw": "Reported outcome",
+        "ranking_relevance_score": "Lexical score",
+        "ranking_reasons": "Why matched",
+        "qc_dap_d4_record_status": "D4 QC",
+        "source_anchor": "NASA source locator",
+    }
+
+    st.dataframe(
+        results[list(display_columns)].rename(
+            columns=display_columns
+        ),
+        hide_index=True,
+        use_container_width=True,
+    )
+
+    st.caption(
+        "Lexical scores are relative search weights, "
+        "not percentages, reliability estimates, "
+        "fire-risk scores or NASA-EVP verdicts."
+    )
+
+    chosen_id = st.selectbox(
+        "Inspect ranked result",
+        options=results["flex_test_id"].tolist(),
+        key="r3_selected_evidence_id",
+    )
+
+    # Keep flex_test_id available as both index and source field.
+    chosen = results.set_index(
+        "flex_test_id",
+        drop=False,
+    ).loc[chosen_id]
+
+    if chosen["qc_dap_d4_record_status"] == "REVIEW":
+        st.warning(
+            "D4 REVIEW — "
+            + (
+                chosen["qc_review_reason"]
+                or "Review restrictions apply."
+            )
+        )
+    else:
+        st.info(
+            "D4 VERIFIED for limited point lookup only."
+        )
+
+    st.write(
+        "**Ranking explanation:**",
+        chosen["ranking_reasons"],
+    )
+
+    st.write(
+        "**NASA source locator:**",
+        chosen["source_anchor"],
+    )
+
+    st.write(
+        "**Table IX reference:**",
+        f"printed p.{chosen['printed_page']}; "
+        f"PDF p.{chosen['pdf_page_1based']}",
+    )
+
+    st.write(
+        "**Original NASA report:**",
+        NASA_REPORT_URL,
+    )
+
+    with st.expander("Source values and QC restrictions"):
+
+        st.write(
+            "**Fuel (raw):**",
+            chosen["fuel_raw"],
+        )
+
+        st.write(
+            "**Oxygen mole fraction (raw; dimensionless):**",
+            repr(chosen["oxygen_mole_fraction_raw"]),
+        )
+
+        st.write(
+            "**Ambient pressure (raw; mmHg):**",
+            repr(chosen["ambient_pressure_mmhg_raw"]),
+            "| Blocked:",
+            chosen["curated_pressure_field_blocked"],
+        )
+
+        st.write(
+            "**Droplet diameter at visible flame extinction "
+            "(raw; mm):**",
+            repr(
+                chosen[
+                    "visible_flame_extinction_diameter_mm_raw"
+                ]
+            ),
+            "| Blocked:",
+            chosen["curated_extinction_diameter_field_blocked"],
+        )
+
+        st.write(
+            "**Permitted uses:**",
+            chosen["qc_permitted_uses"],
+        )
+
+        st.write(
+            "**Blocked uses:**",
+            chosen["qc_blocked_uses"],
+        )
+
+        st.write(
+            "**QC flags:**",
+            chosen["qc_qc_flags"] or "None recorded",
+        )
+
+        st.write(
+            "**Audited figure locator:**",
+            chosen["qc_appendix_b_anchor"]
+            or "Not recorded in this release",
+        )
 
 
 if __name__ == "__main__":
