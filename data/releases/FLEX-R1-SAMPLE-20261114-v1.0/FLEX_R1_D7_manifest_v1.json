@@ -1,0 +1,284 @@
+{
+  "data_release_id": "FLEX-R1-SAMPLE-20261114-v1.0",
+  "release_created_at_Asia_Almaty": "2026-11-14T11:10:30+05:00",
+  "type": "BOUNDED_VERIFIED_POINT_LOOKUP_SAMPLE_NOT_FULL_FLEX_DATASET",
+  "audit_protocol": "NASA-DAP v1.0 D0-D7",
+  "report_id": "NASA/TP-2015-216046",
+  "source_document_id": "20150023456",
+  "source_pdf_filename": "20150023456.pdf",
+  "source_pdf_sha256": "b4f6ca983e2792c33a0b92220a791a818f426bb635b94f7fd33dc8c9c471e79d",
+  "source_pdf_bytes": 42900650,
+  "source_pdf_pages_PyMuPDF": 314,
+  "source_ntrs_url": "https://ntrs.nasa.gov/citations/20150023456",
+  "source_doi_psi": "10.60555/mbq8-0451",
+  "source_psi_investigation": "PSI-69",
+  "source_psi_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
+  "license_context": {
+    "NTRS_report": "Public Use Permitted (NASA NTRS metadata)",
+    "PSI_investigation": "CC0-1.0 (dataset-level, not automatic report license)",
+    "attribution": "Always cite NASA report, publication, exact printed/PDF page, Table IX and FLEX ID; see NASA STI disclaimers",
+    "challenge_official_resources": "PENDING_OFFICIAL_TAB_VERIFICATION"
+  },
+  "input_prior_raw_sha256": "ceeec0f8096433c432ea42c89ca7e6e1e530faa16decccff50b8fb7446da4c99",
+  "input_prior_qc_sha256": "991709d37660ad92ef4875645d9e79082f30306fe6fcc2d18211381d09c45cfd",
+  "source_table": "IX",
+  "raw_records": 17,
+  "new_records": 8,
+  "new_requested_seven_ids": [
+    "FLEX-003",
+    "FLEX-005",
+    "FLEX-006",
+    "FLEX-033",
+    "FLEX-034",
+    "FLEX-035",
+    "FLEX-036"
+  ],
+  "reserve_new_id": "FLEX-061",
+  "d4_record_status_counts": {
+    "REVIEW": 7,
+    "VERIFIED": 10
+  },
+  "verified_for": "source-linked point lookup and display of individually reported table fields, with metric restrictions",
+  "not_verified_for": [
+    "uncontrolled comparison",
+    "causal relationships",
+    "fire risk rating",
+    "predictive model",
+    "moon/mars extrapolation",
+    "whole PSI coverage"
+  ],
+  "normalization_rules": {
+    "id": "NORM-R1-V1",
+    "decimal_parsing": "Decimal; preserve original raw in separate file",
+    "raw_em_dash": "mapped to empty cell / unknown in curated only; raw kept intact",
+    "raw_zero": "kept as zero; never mapped to missing",
+    "units": "Original field units retained; no unit conversions",
+    "extinction_diameter": "droplet diameter at visible-flame extinction, NOT flame diameter",
+    "support_mode": "only extracted from Appendix B figure captions for new 8 rows; old 9 left UNKNOWN_NOT_ASSERTED"
+  },
+  "reconciliation": {
+    "NASA_abstract_tests": 284,
+    "Table_IX_rows_previous_audit": 276,
+    "PSI_entries_previously_reported_unverified": 275,
+    "status": "PARTIALLY_RECONCILED; NOT EQUATED"
+  },
+  "new_figure_caption_evidence": {
+    "FLEX-003": {
+      "table_pdf_page": 26,
+      "table_printed_page": 20,
+      "figure_pdf_page": 37,
+      "figure_printed_page": 31,
+      "figure_number": 7,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p31|PDF_p37|Figure_7|FLEX-003",
+      "support_mode": "free-floating",
+      "caption_quality_note": "LLUV_CALIBRATION_LOW_CONTRAST",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-005": {
+      "table_pdf_page": 26,
+      "table_printed_page": 20,
+      "figure_pdf_page": 39,
+      "figure_printed_page": 33,
+      "figure_number": 9,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p33|PDF_p39|Figure_9|FLEX-005",
+      "support_mode": "free-floating",
+      "caption_quality_note": "LLUV_INCOMPLETE_CALIBRATION_POSSIBLE_BUBBLE",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-006": {
+      "table_pdf_page": 26,
+      "table_printed_page": 20,
+      "figure_pdf_page": 40,
+      "figure_printed_page": 34,
+      "figure_number": 10,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p34|PDF_p40|Figure_10|FLEX-006",
+      "support_mode": "free-floating",
+      "caption_quality_note": "HIBMS_FOV_INTERRUPTION_LLUV_DIM",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-033": {
+      "table_pdf_page": 27,
+      "table_printed_page": 21,
+      "figure_pdf_page": 67,
+      "figure_printed_page": 61,
+      "figure_number": 37,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p61|PDF_p67|Figure_37|FLEX-033",
+      "support_mode": "free-floating",
+      "caption_quality_note": "COLOR_CAMERA_MISSING",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-034": {
+      "table_pdf_page": 27,
+      "table_printed_page": 21,
+      "figure_pdf_page": 68,
+      "figure_printed_page": 62,
+      "figure_number": 38,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p62|PDF_p68|Figure_38|FLEX-034",
+      "support_mode": "free-floating",
+      "caption_quality_note": "TABLE_CAPTION_EXTINCTION_DIAMETER_CONTRADICTION",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-035": {
+      "table_pdf_page": 27,
+      "table_printed_page": 21,
+      "figure_pdf_page": 69,
+      "figure_printed_page": 63,
+      "figure_number": 39,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p63|PDF_p69|Figure_39|FLEX-035",
+      "support_mode": "free-floating",
+      "caption_quality_note": "CAPTION_INDICATES_POST_VISIBLE_EXTINCTION_COOL_FLAME",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-036": {
+      "table_pdf_page": 27,
+      "table_printed_page": 21,
+      "figure_pdf_page": 70,
+      "figure_printed_page": 64,
+      "figure_number": 40,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p64|PDF_p70|Figure_40|FLEX-036",
+      "support_mode": "free-floating",
+      "caption_quality_note": "NONE",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    },
+    "FLEX-061": {
+      "table_pdf_page": 27,
+      "table_printed_page": 21,
+      "figure_pdf_page": 95,
+      "figure_printed_page": 89,
+      "figure_number": 65,
+      "figure_anchor": "NASA/TP-2015-216046|printed_p89|PDF_p95|Figure_65|FLEX-061",
+      "support_mode": "fiber-supported",
+      "caption_quality_note": "VERY_DIM_FLAME_IN_LLUV_AND_COLOR",
+      "source_context_checked": "VISUAL_AND_TEXT"
+    }
+  },
+  "files": {
+    "FLEX_R1_D7_raw_17row_v1.csv": {
+      "sha256": "69428edf15851f753701a22e74738b517b0d480d18f2999180adade157197839",
+      "bytes": 4274
+    },
+    "FLEX_R1_D7_curated_17row_v1.csv": {
+      "sha256": "dc2aea3dfc8edae6c86bef13528e2305889673dc508754999fc0b5794e42f67e",
+      "bytes": 4291
+    },
+    "FLEX_R1_D7_QC_17row_v1.csv": {
+      "sha256": "f5910e5fdf4d5d371d00f06fc717706439b704448810c252ef7740a0385a6b9d",
+      "bytes": 9919
+    }
+  },
+  "source_documents_used": {
+    "D0_D3_note": "FLEX_R1_D0-D3_audit_v0.1.md",
+    "D4_report": "FLEX_R1_D4_QC_Report_v0.1.md",
+    "D5_log": "FLEX_R1_D5_Reconciliation_Log_v0.1.md",
+    "D6_report": "FLEX_R1_D6_Fitness_for_Use_v0.1.md"
+  },
+  "developer_repo_application": "NOT_PERFORMED",
+  "developer_local_git_commit": "NOT_CONFIRMED",
+  "developer_local_tests": "NOT_PERFORMED",
+  "release_quality_gate": "PASSED_BOUNDED_SAMPLE_VALIDATION_IN_AUDIT_ENV",
+  "field_dictionary_D7": {
+    "ambient_pressure_mmhg_raw": {
+      "unit": "mmHg",
+      "value_kind": "MEASURED",
+      "note": "Published absolute ambient pressure; provenance is report; FLEX-114 literal zero blocked"
+    },
+    "oxygen_mole_fraction_raw": {
+      "unit": "mole fraction",
+      "value_kind": "DERIVED",
+      "note": "From detailed chamber-fill and operation records; not assumed directly measured in this export"
+    },
+    "nitrogen_mole_fraction_raw": {
+      "unit": "mole fraction",
+      "value_kind": "DERIVED",
+      "note": "From detailed chamber records"
+    },
+    "carbon_dioxide_mole_fraction_raw": {
+      "unit": "mole fraction",
+      "value_kind": "DERIVED",
+      "note": "From detailed chamber records"
+    },
+    "helium_mole_fraction_raw": {
+      "unit": "mole fraction",
+      "value_kind": "DERIVED",
+      "note": "From detailed chamber records"
+    },
+    "initial_droplet_diameter_mm_raw": {
+      "unit": "mm",
+      "value_kind": "MEASURED",
+      "note": "Image-based droplet dimension reported in Table IX"
+    },
+    "visible_flame_extinction_diameter_mm_raw": {
+      "unit": "mm",
+      "value_kind": "UNKNOWN",
+      "note": "Reported droplet diameter at visible-flame extinction; image-derived or sometimes extrapolated; per-row method not guaranteed"
+    },
+    "burning_rate_mm2_per_s_raw": {
+      "unit": "mm²/s",
+      "value_kind": "DERIVED",
+      "note": "Average constant fitted from diameter-squared history"
+    },
+    "burn_time_s_raw": {
+      "unit": "s",
+      "value_kind": "DERIVED",
+      "note": "Reported time derived from test history; do not recalculate without time-base audit"
+    },
+    "test_end_raw": {
+      "unit": "categorical",
+      "value_kind": "REPORTED_FINDING",
+      "note": "Extinction / Disruption / Completion, preserve as reported"
+    },
+    "appendix_b_caption_qualifications": {
+      "unit": "text",
+      "value_kind": "REPORTED_FINDING",
+      "note": "Attributions to NASA caption, not independent instrument measurements"
+    }
+  },
+  "pdf_hosted_byte_for_byte_match": "NOT_TESTED; local title/report and official NTRS metadata matched",
+  "known_field_restrictions": {
+    "FLEX-034": "Table IX 2 mm vs Figure 38 says no extinction diameter; blocked",
+    "FLEX-114": "0 mmHg pressure; blocked",
+    "FLEX-004": "missing extinction diameter; blocked",
+    "FLEX-039": "literal 0 mm extinction diameter with Disruption; blocked",
+    "FLEX-001": "Disruption plus positive diameter; requires interpretation",
+    "FLEX-020": "Completion plus positive diameter; requires interpretation",
+    "FLEX-009": "missing time and four numeric measurements"
+  },
+  "supporting_artifacts": {
+    "FLEX_R1_D7_validation_check.py": {
+      "sha256": "bbdcbad882116812ecf95a389fcebc49275f3a4fabd266aeb85373546b9407b4",
+      "bytes": 3818
+    },
+    "FLEX_R1_D7_QC_and_Release_Report_v1.md": {
+      "sha256": "1d6c49b361fb2eb93f2c57bf57516b1b599851bade03e5ea9a87e5d108168608",
+      "bytes": 9069
+    },
+    "FLEX_R1_D7_Python_Development_Handoff_v1.md": {
+      "sha256": "78867a7a1e42a7988a2489bc9b203d4ed45f9126a5de052598d4dcc16ddaa79e",
+      "bytes": 3981
+    },
+    "FLEX_R1_D0-D3_audit_v0.1.md": {
+      "sha256": "116fe3303aef51b8913d424706f2f0c381faea83d23d0b6b4009dc54f13a555d",
+      "bytes": 7651
+    },
+    "FLEX_R1_D4_QC_Report_v0.1.md": {
+      "sha256": "bf24700dd02b938669e0077553098fc728c373d24420df2ca8ab192a99306d0a",
+      "bytes": 6717
+    },
+    "FLEX_R1_D5_Reconciliation_Log_v0.1.md": {
+      "sha256": "1ccf288f5497203c1c78bc969e0265a33e5bac0dc3f13067b5c2621388a14d26",
+      "bytes": 9431
+    },
+    "FLEX_R1_D6_Fitness_for_Use_v0.1.md": {
+      "sha256": "d51f0808f3e4c7ef58a41fd348b54a6b1fbdc43ccf9844c40a806d60fbe899a0",
+      "bytes": 13817
+    },
+    "FLEX_TableIX_9row_manual_sample_v0.1.csv": {
+      "sha256": "ceeec0f8096433c432ea42c89ca7e6e1e530faa16decccff50b8fb7446da4c99",
+      "bytes": 2471
+    },
+    "FLEX_D4_9row_QC_status_v0.1.csv": {
+      "sha256": "991709d37660ad92ef4875645d9e79082f30306fe6fcc2d18211381d09c45cfd",
+      "bytes": 4226
+    }
+  }
+}
