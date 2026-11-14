@@ -11,6 +11,7 @@ from src.flex_d7_loader import RELEASE_ID, load_flex_d7_release
 from src.explorer_filters import filter_flex_records
 from src.explorer_charts import sample_category_counts
 from src.ranking import search_and_rank_flex
+from src.verification_ui import render_verification_panel
 
 
 RELEASE_DIR = (
@@ -69,8 +70,11 @@ def main() -> None:
         "safety thresholds, or predictions."
     )
 
-    # R3.3 — Search independently across the full D7 release.
+    # R3.3 — Independent evidence search across the full D7 release.
     render_evidence_search(records)
+
+    # R4.6 — Independently verified, source-linked structured claims.
+    render_verification_panel(records, RELEASE_DIR)
 
     # R2.2 — Interactive filters for source-linked experiments.
     st.subheader("Filter experiments")
@@ -166,7 +170,7 @@ def main() -> None:
         )
         st.stop()
 
-    # R2.3 — Descriptive counts for the currently selected D7 records.
+    # R2.3 — Descriptive counts for selected D7 records.
     st.subheader("Audited sample composition")
 
     st.caption(
@@ -358,7 +362,7 @@ def main() -> None:
 
 
 def render_evidence_search(records) -> None:
-    """Display deterministic FLEX metadata search and source-linked results."""
+    """Display source-linked deterministic FLEX metadata search."""
 
     st.divider()
     st.subheader("Evidence Search — FLEX D7")
@@ -427,7 +431,7 @@ def render_evidence_search(records) -> None:
         key="r3_selected_evidence_id",
     )
 
-    # Keep flex_test_id available as both index and source field.
+    # Preserve flex_test_id both as index and as a source field.
     chosen = results.set_index(
         "flex_test_id",
         drop=False,
@@ -468,7 +472,6 @@ def render_evidence_search(records) -> None:
     )
 
     with st.expander("Source values and QC restrictions"):
-
         st.write(
             "**Fuel (raw):**",
             chosen["fuel_raw"],
