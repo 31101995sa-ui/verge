@@ -106,4 +106,17 @@ ChatGPT is used as an AI development and research assistant. The project has one
 
 ## License
 
-Project licensing and third-party source permissions are under review.
+
+## License
+
+Original project code is licensed under Apache-2.0.
+See [LICENSE](LICENSE).
+
+NASA datasets, publications, imagery, and third-party
+dependencies retain their respective licenses and
+usage conditions.
+
+This is an independent project developed for the
+NASA Space Apps Challenge 2026. It is not an
+official NASA product or NASA-endorsed software.
+

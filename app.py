@@ -1,3 +1,6 @@
+# AI-assisted development: ChatGPT (GPT-6).
+# Code reviewed and executed by the human project owner.
+
 
 import streamlit as st
 

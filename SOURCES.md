@@ -106,3 +106,27 @@ All publicly displayed scientific results must include traceable source referenc
 - Review source-specific reuse rights
 - Complete DAP D0-D7
 - Create verified data release after extraction
+
+
+## R0 Compliance References
+
+NASA Space Apps Participant Terms:
+https://www.spaceappschallenge.org/legal/
+
+NASA Media Usage Guidelines:
+https://www.nasa.gov/nasa-brand-center/images-and-media/
+
+NASA PSI Open Data:
+https://registry.opendata.aws/nasa-psi/
+
+NASA FLEX NTRS:
+https://ntrs.nasa.gov/citations/20150023456
+
+NASA BASS-II NTRS:
+https://ntrs.nasa.gov/citations/20210011385
+
+Project compliance review:
+docs/R0_COMPLIANCE.md
+
+Official Challenge Resource membership must be
+visually confirmed before marking R0 CLOSED.
