@@ -5,8 +5,11 @@
 from pathlib import Path
 
 import streamlit as st
+import plotly.express as px
 
 from src.flex_d7_loader import RELEASE_ID, load_flex_d7_release
+from src.explorer_filters import filter_flex_records
+from src.explorer_charts import sample_category_counts
 
 
 RELEASE_DIR = (
@@ -65,6 +68,73 @@ def main() -> None:
         "safety thresholds, or predictions."
     )
 
+
+    # R2.2 — Interactive filters for source-linked experiments.
+    st.subheader("Filter experiments")
+
+    search_col, fuel_col = st.columns([2, 1])
+
+    with search_col:
+        test_id_query = st.text_input(
+            "Search by experiment ID",
+            placeholder="e.g. FLEX-034",
+        )
+
+    with fuel_col:
+        selected_fuels = st.multiselect(
+            "Fuel",
+            options=sorted(records["fuel_raw"].unique().tolist()),
+        )
+
+    oxygen_col, outcome_col, qc_col = st.columns(3)
+
+    with oxygen_col:
+        selected_oxygen = st.multiselect(
+            "O₂ mole fraction (normalized)",
+            options=sorted(
+                records[
+                    "curated_oxygen_mole_fraction"
+                ].unique().tolist()
+            ),
+            help=(
+                "Uses audited normalized text for filtering. "
+                "Original NASA strings remain unchanged."
+            ),
+        )
+
+    with outcome_col:
+        selected_outcomes = st.multiselect(
+            "Reported test end",
+            options=sorted(records["test_end_raw"].unique().tolist()),
+        )
+
+    with qc_col:
+        selected_qc = st.multiselect(
+            "D4 QC status",
+            options=sorted(
+                records[
+                    "qc_dap_d4_record_status"
+                ].unique().tolist()
+            ),
+        )
+
+    # Reuse the independently tested R2.1 filter.
+    filtered_records = filter_flex_records(
+        records,
+        test_id_query=test_id_query,
+        fuels=selected_fuels,
+        oxygen_fractions=selected_oxygen,
+        outcomes=selected_outcomes,
+        qc_statuses=selected_qc,
+    )
+
+    st.caption(
+        f"Showing {len(filtered_records)} of {len(records)} "
+        "audited FLEX records. "
+        "Empty filter selections mean 'all'."
+    )
+
+
     # Source-linked overview.
     display_columns = {
         "flex_test_id": "Test ID",
@@ -79,24 +149,101 @@ def main() -> None:
         "source_anchor": "NASA source locator",
     }
 
+    
     st.dataframe(
-        records[list(display_columns)].rename(
+        filtered_records[list(display_columns)].rename(
             columns=display_columns
         ),
         hide_index=True,
         use_container_width=True,
     )
 
+    if filtered_records.empty:
+        st.warning(
+            "No experiments match the selected filters. "
+            "Try changing or clearing your selections."
+        )
+        st.stop()
+
+
+    # R2.3 — Descriptive counts for the currently selected D7 records.
+    st.subheader("Audited sample composition")
+
+    st.caption(
+        f"Showing categorical counts for {len(filtered_records)} "
+        f"selected records out of {len(records)} in the bounded "
+        f"FLEX D7 sample ({RELEASE_ID}). "
+        "These counts are not representative of all FLEX tests. "
+        "No causal comparison or physical prediction is implied."
+    )
+
+    chart_definitions = (
+        ("fuel_raw", "Fuel"),
+        ("test_end_raw", "Reported test end"),
+        ("qc_dap_d4_record_status", "D4 QC status"),
+    )
+
+    chart_columns = st.columns(3)
+
+    for chart_column, (field, chart_title) in zip(
+        chart_columns,
+        chart_definitions,
+    ):
+        counts = sample_category_counts(
+            filtered_records,
+            field,
+        )
+
+        figure = px.bar(
+            counts,
+            x="category",
+            y="sample_records",
+            text="sample_records",
+            title=chart_title,
+            labels={
+                "category": chart_title,
+                "sample_records": "Audited records",
+            },
+        )
+
+        figure.update_yaxes(
+            rangemode="tozero",
+        )
+
+        figure.update_layout(
+            showlegend=False,
+            margin=dict(
+                l=10,
+                r=10,
+                t=45,
+                b=10,
+            ),
+        )
+
+        with chart_column:
+            st.plotly_chart(
+                figure,
+                use_container_width=True,
+                key=f"d7_count_{field}",
+            )
+
+
+
     st.divider()
     st.subheader("Inspect a source record")
 
     # Allow inspection of individual experiments.
+    
     chosen_id = st.selectbox(
         "Experiment ID",
-        options=records["flex_test_id"].tolist(),
+        options=filtered_records["flex_test_id"].tolist(),
     )
 
-    record = records.set_index("flex_test_id", drop=False).loc[chosen_id]
+    record = filtered_records.set_index(
+        "flex_test_id",
+        drop=False,
+    ).loc[chosen_id]
+
     status = record["qc_dap_d4_record_status"]
 
     if status == "REVIEW":
