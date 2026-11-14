@@ -14,6 +14,7 @@ import streamlit as st
 
 from src.claim_router import REPORT_URL, verify_claim_from_release
 from src.evidence_ledger import ledger_as_json, make_evidence_entry
+from src.english_claim_ui import render_english_claim_input
 from src.field_evidence import FIELD_RULES
 from src.flex_d7_loader import RELEASE_ID
 from src.scope_gate import SCOPE_RULES
@@ -45,8 +46,10 @@ def render_verification_panel(records: pd.DataFrame, release_dir: str | Path) ->
     st.caption(
         "Verify structured claims against NASA/TP-2015-216046, Table IX. "
         "The 17-record D7 sample is not a validated prediction dataset. "
-        "This form does not interpret free text or search counterexamples."
+        "Only a restricted English grammar is supported; no automatic counterexample search."
     )
+
+    render_english_claim_input(records, release_dir)
 
     with st.form("r4_verification_form"):
         experiment_id = st.selectbox(
@@ -130,6 +133,8 @@ def render_verification_panel(records: pd.DataFrame, release_dir: str | Path) ->
             f"{submitted_claim.get('raw_csv_field') or 'scope policy'}"
         )
         st.caption(f"Evaluated claim: {claim_description}")
+        if last.get("claim_text") is not None:
+            st.write("**Confirmed English statement:**", last["claim_text"])
         if submitted_claim.get("asserted_value") is not None:
             st.write(
                 "**Asserted:**", repr(submitted_claim["asserted_value"]),

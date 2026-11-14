@@ -26,6 +26,7 @@ def make_evidence_entry(
     *,
     sequence: int,
     run_id: str = "local-session",
+    claim_text: str | None = None,
     recorded_at: datetime | None = None,
 ) -> dict:
     """Snapshot a claim and its observed verifier result with a traceable ID."""
@@ -43,6 +44,10 @@ def make_evidence_entry(
         raise ValueError("Invalid separation of scientific verdict and technical state")
     if claim.get("data_release_id") != RELEASE_ID:
         raise ValueError("Unexpected claim data release")
+    if claim_text is not None and (
+        not isinstance(claim_text, str) or not claim_text.strip()
+    ):
+        raise ValueError("claim_text must be nonempty English text or None")
 
     moment = recorded_at or datetime.now(timezone.utc)
     if moment.tzinfo is None or moment.utcoffset() is None:
@@ -51,9 +56,14 @@ def make_evidence_entry(
     saved_claim = deepcopy(dict(claim))
     saved_result = deepcopy(dict(result))
     # Fingerprint is for local traceability, not a signature or NASA endorsement.
+    fingerprint_payload = {
+        "sequence": sequence, "claim": saved_claim, "result": saved_result
+    }
+    if claim_text is not None:
+        fingerprint_payload["claim_text"] = claim_text
     fingerprint = sha256(
         json.dumps(
-            {"sequence": sequence, "claim": saved_claim, "result": saved_result},
+            fingerprint_payload,
             ensure_ascii=False, sort_keys=True, separators=(",", ":"),
         ).encode("utf-8")
     ).hexdigest()[:24]
@@ -65,7 +75,7 @@ def make_evidence_entry(
         "sequence": sequence,
         "timestamp_utc": moment.astimezone(timezone.utc).isoformat(),
         "data_release_id": RELEASE_ID,
-        "claim_text": None,  # The form receives structured fields, not English prose.
+        "claim_text": claim_text,  # Original human-confirmed input, when provided.
         "claim": saved_claim,
         "source_refs": [saved_result["source_anchor"]] if saved_result.get("source_anchor") else [],
         "proof_obligation": saved_claim.get("claim_class"),
@@ -87,9 +97,10 @@ def ledger_as_json(entries: Sequence[Mapping]) -> str:
         "schema": SCHEMA,
         "data_release_id": RELEASE_ID,
         "scope": (
-            "Structured Table IX assertions only; no free-text inference, "
-            "automated counterexample search, physical safety assessment, "
-            "or scientific certification"
+            "Structured Table IX assertions, optionally parsed from a "
+            "human-confirmed narrow English grammar; no general free-text "
+            "inference, automatic counterexample search, physical safety "
+            "assessment, or scientific certification"
         ),
         "entry_count": len(entries),
         "entries": [deepcopy(dict(entry)) for entry in entries],
