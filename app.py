@@ -34,7 +34,7 @@ BASS_RELEASE_DIR = Path(__file__).resolve().parent / "data" / "releases" / BASS_
 
 def main() -> None:
     st.set_page_config(
-        page_title="VERGE — NASA Edition",
+        page_title="VERGE",
         page_icon="🛰️",
         layout="wide",
     )

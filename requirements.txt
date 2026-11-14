@@ -1,4 +1,4 @@
-# Minimal runtime dependencies for VERGE-NASA Edition (Streamlit Cloud).
+# Minimal runtime dependencies for VERGE (Streamlit Cloud).
 # Versions are from the verified 2026-11-14 project environment.
 streamlit==1.67.0
 pandas==3.1.1

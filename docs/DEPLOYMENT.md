@@ -1,4 +1,4 @@
-# Deploy VERGE — NASA Edition (Streamlit Community Cloud)
+# Deploy VERGE (Streamlit Community Cloud)
 
 **Status:** deployment procedure prepared; a real public deployment is **not yet verified**.
 

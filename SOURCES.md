@@ -1,6 +1,6 @@
 # Scientific Sources and Provenance
 
-**Registry snapshot:** 14 November 2026 · **Project:** VERGE — NASA Edition
+**Registry snapshot:** 14 November 2026 · **Project:** VERGE
 **Authority:** Original NASA reports and source-linked versioned D7 releases, not LLM-generated explanations.
 
 ## Challenge and resource requirement

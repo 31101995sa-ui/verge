@@ -1,8 +1,12 @@
-# VERGE — NASA Edition
+# VERGE — Verified Evidence and Risk-Governed Exploration
 
 **Scientific Mission Control for evidence-linked microgravity combustion research**
 **NASA Space Apps Challenge 2026 · Flame in Freefall**
 **Stellar Anvil · independent participant project (not an official NASA product)**
+
+**VERGE** expands to **Verified Evidence and Risk-Governed Exploration**. In this project, "risk-governed" means guarding against unsupported scientific claims, bad source attribution, data-quality anomalies and extrapolation beyond the evidence — **not** predicting physical fire risk.
+
+The product is called **VERGE**. NASA is an attributed source of research data and the organizer of the Space Apps Challenge, **not** a co-developer, endorser or part of the product brand.
 
 VERGE is a bilingual (English/Russian) Streamlit research dashboard for **looking up, exploring, searching, and checking bounded claims** against NASA combustion reports. It is designed around a traceable chain from a published observation to a source locator, quality restriction, and independent deterministic verification.
 

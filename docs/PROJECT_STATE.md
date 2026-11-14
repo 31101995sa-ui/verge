@@ -1,4 +1,4 @@
-# PROJECT_STATE — VERGE-NASA Edition
+# PROJECT_STATE — VERGE
 
 **Snapshot date:** 2026-11-14 · **Timezone:** Asia/Almaty
 **Scope:** Phase B.2 deployment-readiness preparation, after R5.3 and Scientific Mission Control UI.

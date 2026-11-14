@@ -41,7 +41,7 @@ def render_mission_header(language: str) -> None:
 
     left, right = st.columns([5, 1], vertical_alignment="center")
     with left:
-        st.title("◉ VERGE · NASA EDITION")
+        st.title("◉ VERGE")
         st.caption(tr("mc_subtitle", language))
     with right:
         st.caption("FLEX D7 · BASS-II D7")

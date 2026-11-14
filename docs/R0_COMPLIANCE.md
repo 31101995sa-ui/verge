@@ -2,7 +2,7 @@
 
 **Snapshot:** 2026-11-14 · Asia/Almaty
 **Challenge:** NASA Space Apps Challenge 2026, *Flame in Freefall*
-**Project:** VERGE — NASA Edition; one registered human participant, AI assistant not a human teammate.
+**Project:** VERGE; one registered human participant, AI assistant not a human teammate.
 
 ## Event and submission
 
@@ -27,6 +27,7 @@ NASA Space Apps GO Team states Global Awards eligibility requires **at least one
 - BASS-II: NASA NTRS 20210011385, `NASA/TM-20210011385` — NTRS displays **“Use by or on behalf of the US Gov. Permitted”**, not a general CC0 report license. The public project provides links and a limited cited table of factual values; do not redistribute the complete report PDF, its figures or videos without rights review.
 - Project code: Apache-2.0, see `LICENSE`; no license is asserted over NASA/third-party assets.
 - Avoid NASA marks or statements of endorsement. Include "independent project; not affiliated with or endorsed by NASA" wording.
+- **Public product branding:** VERGE only. The original NASA name in project-title strings is retired. Keep official NASA identifiers in citations, report titles, provenance and factual event participation; they are not product branding. Do not alter immutable NASA D7 releases or historical Git commits for cosmetic renaming.
 
 ## Source and scientific honesty
 

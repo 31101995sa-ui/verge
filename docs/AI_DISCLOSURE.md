@@ -1,6 +1,6 @@
 # AI Assistance Disclosure
 
-**Project:** VERGE — NASA Edition / Stellar Anvil
+**Project:** VERGE / Stellar Anvil
 **Challenge:** NASA Space Apps Challenge 2026 — Flame in Freefall
 **Date:** 14 November 2026
 
