@@ -1,0 +1,15 @@
+﻿field_key,literal_source_label,semantic_definition,raw_unit,normalized_unit_proposal,value_kind,method_origin,source_locator,comparison_or_qc_rule
+source_id,NASA/TM-20210011385,document provenance,none,none,REPORTED_FINDING,DOCUMENT_METADATA,NTRS ID 20210011385,must equal source registry ID
+table_row_oxygen_percent,"O₂, percent",ambient oxygen condition in Table 2.1,%,% (or fraction if explicit /100),REPORTED_FINDING,CONDITION_LABEL,printed_p28|PDF_p36|Table_2.1,oxygen column is percent; 21 -> 0.21 fraction only with recorded transformation
+material,THIN POLYMETHYLMETHACRYLATE,PMMA sheet specimen,category,PMMA,REPORTED_FINDING,SHARED_CONDITION,printed_p28|PDF_p36|Table_2.1_caption,not generic solid fuels
+gas_pressure,at 1 atm,shared nominal ambient pressure,atm,atm,REPORTED_FINDING,SHARED_CONDITION,printed_p28|PDF_p36|Table_2.1_caption,not an independently measured per-run pressure
+flow_configuration,opposed-flow,forced flow opposite flame spread direction,category,opposed,REPORTED_FINDING,EXPERIMENTAL_SETUP,printed_p21|PDF_p29|section_2.2.3,exclude concurrent flow
+gravity_regime,aboard International Space Station,microgravity condition,category,ISS microgravity,REPORTED_FINDING,EXPERIMENTAL_SETUP,printed_p21|PDF_p29|section_2.2.3,do not extrapolate to partial gravity
+critical_velocity_experiment_raw,Experiment,experimentally determined critical opposed flow speed,mm/s,mm/s,REPORTED_FINDING,EXPERIMENTAL,printed_p28|PDF_p36|Table_2.1,keep ±5 as published; not direct anemometer point
+critical_velocity_exp_uncertainty_raw,±5,reported experimental ± component; type not fully specified here,mm/s,mm/s,REPORTED_FINDING,EXPERIMENTAL,printed_p28|PDF_p36|Table_2.1,do not interpret as standard deviation or 95% CI
+critical_velocity_computation_raw,Computation,2D numerical model predicted extinction speed,mm/s,mm/s,DERIVED,COMPUTATIONAL_MODEL,printed_p28|PDF_p36|Table_2.1,no explicit uncertainty; never fill as zero
+critical_velocity_theory_raw,"Theory, Equation (2.5)",analytical scale prediction of extinction speed,mm/s,mm/s,DERIVED,ANALYTICAL_MODEL,printed_p28|PDF_p36|Table_2.1,"no explicit uncertainty; eq (2.5), assumptions required"
+sample_thickness_context,thickness ranging from 100 to 400 µm,contextual thickness range; not a single Table 2.1 row attribute,µm,µm,REPORTED_FINDING,EXPERIMENTAL_SETUP,printed_p21|PDF_p29|section_2.2.3,row-specific thickness UNKNOWN
+sample_width_context,20 mm wide; 20 mm / 10 mm at 16 percent,nominal width plus lower O2 exception,mm,mm,REPORTED_FINDING,EXPERIMENTAL_SETUP,printed_p21|PDF_p29;printed_p25|PDF_p33,row-specific width UNKNOWN; do not assume matched widths
+critical_velocity_definition,"Vg,cr",threshold below which steady flame spread cannot be sustained in this low opposed-flow configuration,mm/s,mm/s,REPORTED_FINDING,METHOD_DEFINITION,printed_p23|PDF_p31;printed_p28|PDF_p36,not flame spread velocity Vf; not general fire-safe threshold
+original_test_id,not present in Table 2.1,as-run experimental identifier not supplied in target table,none,none,UNKNOWN,UNKNOWN,printed_p28|PDF_p36|Table_2.1,do not invent or derive from condition index

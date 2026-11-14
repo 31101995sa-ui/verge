@@ -1,0 +1,59 @@
+{
+  "audit_status": "D3_D4_COMPLETE_TARGETED_TABLE_2_1",
+  "source_pdf_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+  "source_pdf_page_count": 144,
+  "source_locator": "NASA/TM-20210011385|printed_p28|PDF_p36|Table_2.1",
+  "checks_passed": 10,
+  "checks": [
+    {
+      "name": "PDF SHA-256/144-page identity matches D0",
+      "result": "PASS"
+    },
+    {
+      "name": "table values match PDF page 36 rendered cells and extracted word coordinates",
+      "result": "PASS"
+    },
+    {
+      "name": "two unique oxygen rows and six method-specific evidence cells",
+      "result": "PASS"
+    },
+    {
+      "name": "six exact literal cell strings conserved",
+      "result": "PASS"
+    },
+    {
+      "name": "two ±5 experimental uncertainties conserved; four model uncertainties NOT_REPORTED",
+      "result": "PASS"
+    },
+    {
+      "name": "21/16 percent /100 conversion explicit and exact Decimal",
+      "result": "PASS"
+    },
+    {
+      "name": "method origin and value kinds distinguish experimental reported findings from models",
+      "result": "PASS"
+    },
+    {
+      "name": "source anchors unique; source hash and exact pages embedded",
+      "result": "PASS"
+    },
+    {
+      "name": "no fabricated original test ID",
+      "result": "PASS"
+    },
+    {
+      "name": "published p23/p25/p26/p28 context and limits recorded; no D7 claim",
+      "result": "PASS"
+    }
+  ],
+  "raw_rows": 2,
+  "evidence_cells": 6,
+  "reported_experimental_uncertainties": 2,
+  "original_as_run_test_ids": "NOT_PRESENT_IN_TABLE",
+  "D7_release": false,
+  "artifacts": {
+    "BASS_II_R5_D3_Table2_1_raw_rows_v0.1.csv": "4d491ec0d637dde2c848ceede4e1e9c3a674f39f9b0f909ac7ab343c65470be4",
+    "BASS_II_R5_D3_D4_Table2_1_evidence_cells_v0.1.csv": "2ade4cbe84d1fe6913bfc339b0a879dc77227d2599c6528ff4136aafad2289e3",
+    "BASS_II_R5_D3_D4_Extraction_QC_Report_v0.1.md": "dad72666e31ec89f6c165b012d149ccf4da3d0988eab18ecc59a23a229342e7c"
+  }
+}

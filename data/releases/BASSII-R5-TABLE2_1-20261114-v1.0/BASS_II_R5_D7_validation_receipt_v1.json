@@ -1,0 +1,16 @@
+{
+  "data_release_id": "BASSII-R5-TABLE2_1-20261114-v1.0",
+  "checked_at_asia_almaty": "2026-11-14T16:41:17+05:00",
+  "command": "python BASS_II_R5_D7_validation_check_v1.py",
+  "exit_code": 0,
+  "stdout": [
+    "PASS: payload SHA-256 and byte sizes match manifest",
+    "PASS: 2 original rows, 6 unique evidence cells, 6 QC matches",
+    "PASS: raw strings, method origins, uncertainty distinctions and exact Decimal oxygen conversions",
+    "PASS: source anchors and scientific block flags preserved",
+    "PASS: 10 predefined proposed claims; none mislabeled as executed",
+    "PASS: bounded NASA-DAP D7 release integrity checks complete"
+  ],
+  "claim_verifier_executed": false,
+  "source_pdf_sha256_checked_at_build": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+}

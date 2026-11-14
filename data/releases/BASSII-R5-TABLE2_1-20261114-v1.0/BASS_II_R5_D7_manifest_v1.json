@@ -1,0 +1,97 @@
+{
+  "data_release_id": "BASSII-R5-TABLE2_1-20261114-v1.0",
+  "release_scope": "BASS-II Table 2.1; two reported oxygen-condition rows and six method-specific cells; no unique as-run test mapping",
+  "created_at_asia_almaty": "2026-11-14T16:41:16+05:00",
+  "audit_protocol": "NASA-DAP v1.0 D0-D7",
+  "source": {
+    "report_id": "NASA/TM-20210011385",
+    "document_id": "20210011385",
+    "citation_url": "https://ntrs.nasa.gov/citations/20210011385",
+    "psi_id": "PSI-25",
+    "psi_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+    "doi": "10.60555/4qc4-de67",
+    "pdf_filename": "TM-20210011385.pdf",
+    "pdf_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+    "pdf_bytes": 48972416,
+    "physical_pdf_pages": 144,
+    "source_table_locator": "NASA/TM-20210011385|printed_p28|PDF_p36|Table_2.1"
+  },
+  "inventory": {
+    "source_rows": 2,
+    "evidence_cells": 6,
+    "experiment_method_cells": 2,
+    "computed_method_cells": 2,
+    "theoretical_method_cells": 2,
+    "original_as_run_test_ids_uniquely_mapped": 0
+  },
+  "statuses": {
+    "source_transcription": "6/6 VERIFIED",
+    "science_fitness": "CONDITIONAL_GO for bounded reported uses only",
+    "D5": "PARTIALLY_RECONCILED",
+    "EVP_10_cases": "PROPOSED_NOT_EXECUTED",
+    "developer_integration": "NOT_TESTED"
+  },
+  "known_issues": [
+    "16pct_table_summary_30±5_vs_prose_approx_26_and_40_unresolved",
+    "run_id_mapping_from_table_2_1_to_appendix_A1_unresolved",
+    "low_velocity_fan_calibration_and_lag",
+    "report_126_tests_vs_previous_PSI_130_entries_unresolved",
+    "psi_dataset_CC0_not_proven_for_all_report_figures",
+    "official_2026_Challenge_Resources_membership_requires_direct_confirmation"
+  ],
+  "files": {
+    "BASS_II_R5_D7_raw_2rows_v1.csv": {
+      "sha256": "4d491ec0d637dde2c848ceede4e1e9c3a674f39f9b0f909ac7ab343c65470be4",
+      "byte_size": 1123
+    },
+    "BASS_II_R5_D7_curated_6cells_v1.csv": {
+      "sha256": "4212bcfae9cf815b3dd3fc78bcc8b81f5c9959f3f969697bbd173b7065313375",
+      "byte_size": 6261
+    },
+    "BASS_II_R5_D7_QC_6cells_v1.csv": {
+      "sha256": "7076c5aaa80e501f7787c7bb0287818e1e6cf74719c2822ce0cd736abe47e265",
+      "byte_size": 5714
+    },
+    "BASS_II_R5_D7_D5_Reconciliation_Log_v1.md": {
+      "sha256": "88f5fa82bd8407f32793d8af6b50fd2cf708c1ecdab783f89daf1204b4ace151",
+      "byte_size": 3670
+    },
+    "BASS_II_R5_D7_D6_Fitness_for_Use_v1.md": {
+      "sha256": "074c1f4fb1c0e9f9b7def8e9e7fb6ad5a9b1385a5128e6d2c54ffbbc1ff8795b",
+      "byte_size": 4462
+    },
+    "BASS_II_R5_D7_QC_and_Release_Report_v1.md": {
+      "sha256": "98740641a7ae8a4a38c03fc20a10829fe7d619d9cdb7bb3838f41a5f3a9b2bf0",
+      "byte_size": 5136
+    },
+    "BASS_II_R5_D7_Python_Development_Handoff_v1.md": {
+      "sha256": "b78c0fd65f114e29e1e17d35b1e73e00ef31c8210f390e6d2fb27fb80a86f931",
+      "byte_size": 3543
+    },
+    "BASS_II_R5_D7_proposed_claims_v1.json": {
+      "sha256": "3bef3a9a5f74560f468f426096a40eecf3037fd55029c5764d48bb2fa61fee3d",
+      "byte_size": 8448
+    },
+    "BASS_II_R5_D7_validation_check_v1.py": {
+      "sha256": "357d8d6ea031796fc745be70de69aff46be95c328d298715459810923769ff8a",
+      "byte_size": 3371
+    },
+    "BASS_II_R5_D0_D2_Source_Inventory_Dictionary_v0.1.md": {
+      "sha256": "c6ac0840d50149fe14d6a677cfb94f82bb7986e337486f4f6f5ab32d3a5e948a",
+      "byte_size": 11441
+    },
+    "BASS_II_R5_D2_Field_Dictionary_v0.1.csv": {
+      "sha256": "a2dd13027880c01caea699967c66574416c4d9e13670885068245301e0a6f780",
+      "byte_size": 3147
+    },
+    "BASS_II_R5_D3_D4_Extraction_QC_Report_v0.1.md": {
+      "sha256": "dad72666e31ec89f6c165b012d149ccf4da3d0988eab18ecc59a23a229342e7c",
+      "byte_size": 9038
+    },
+    "BASS_II_R5_D3_D4_validation_receipt_v0.1.json": {
+      "sha256": "a307efc88efbb3db33e8ed7492c7fff210a6407d38099184c6e2b8bada347d00",
+      "byte_size": 1974
+    }
+  },
+  "note": "Manifest itself intentionally excluded from its own file-hash dictionary; source NASA PDF not redistributed in the ZIP."
+}

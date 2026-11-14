@@ -14,27 +14,23 @@ import streamlit as st
 from src.claim_text_parser import parse_table_ix_claim
 from src.english_claim_flow import verify_confirmed_english_claim
 from src.evidence_ledger import make_evidence_entry
+from src.i18n import parser_reason, tr
 
 
-def render_english_claim_input(records: pd.DataFrame, release_dir: str | Path) -> None:
+def render_english_claim_input(
+    records: pd.DataFrame, release_dir: str | Path, language: str = "en"
+) -> None:
     """Preview a candidate and require a second click before verification."""
-    with st.expander("English Table IX statement — constrained input", expanded=True):
-        st.caption(
-            "A restricted single-source-cell grammar, not general free-text AI. "
-            "Parsing does not verify claims. Confirm the extracted fields "
-            "before the independent NASA-EVP check."
-        )
+    with st.expander(tr("english_expander", language), expanded=True):
+        st.caption(tr("english_help", language))
         text = st.text_area(
-            "Enter one English Table IX statement",
-            placeholder=(
-                "NASA Table IX lists an oxygen mole fraction "
-                "of 0.21 for FLEX-002."
-            ),
+            tr("english_label", language),
+            placeholder=tr("english_example", language),
             key="r4_english_claim_text",
             height=100,
         )
 
-        if st.button("Parse statement", key="r4_english_parse"):
+        if st.button(tr("parse_button", language), key="r4_english_parse"):
             st.session_state["r4_english_parsed_text"] = text
             st.session_state["r4_english_candidate"] = parse_table_ix_claim(
                 text, records
@@ -45,14 +41,14 @@ def render_english_claim_input(records: pd.DataFrame, release_dir: str | Path) -
         if candidate is None:
             return
         if parsed_text != text:
-            st.info("Text changed. Parse again to inspect the updated statement.")
+            st.info(tr("text_changed", language))
             return
         if candidate["parse_status"] != "PARSED":
-            st.warning(candidate["reason"])
+            st.warning(parser_reason(candidate["reason"], language))
             return
 
         claim = candidate["claim"]
-        st.write("**Candidate only — not yet scientifically verified:**")
+        st.write(f"**{tr('candidate_only', language)}:**")
         st.json({
             "experiment_id": claim["experiment_id"],
             "claim_class": claim["claim_class"],
@@ -64,7 +60,7 @@ def render_english_claim_input(records: pd.DataFrame, release_dir: str | Path) -
         })
 
         if st.button(
-            "Confirm parsed fields and verify",
+            tr("confirm_button", language),
             key="r4_english_confirm",
         ):
             try:
@@ -75,7 +71,8 @@ def render_english_claim_input(records: pd.DataFrame, release_dir: str | Path) -
                     candidate=claim,
                 )
             except ValueError as exc:
-                st.error(str(exc))
+                # The original exception is retained; no physical verdict is inferred.
+                st.error(tr("parse_error", language) + ": " + str(exc))
                 return
 
             entries = st.session_state.setdefault("r4_ledger_entries", [])
@@ -91,4 +88,4 @@ def render_english_claim_input(records: pd.DataFrame, release_dir: str | Path) -
             )
             entries.append(entry)
             st.session_state["r4_last_evidence_entry"] = entry
-            st.success("Confirmed claim evaluated. See verdict and ledger below.")
+            st.success(tr("confirm_success", language))

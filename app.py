@@ -5,13 +5,20 @@
 from pathlib import Path
 
 import streamlit as st
-import plotly.express as px
 
 from src.flex_d7_loader import RELEASE_ID, load_flex_d7_release
+from src.bassii_d7_loader import BASS_RELEASE_ID
+from src.bassii_card import render_bassii_card
+from src.bassii_verification_ui import render_bassii_verification
+from src.mission_control_ui import (
+    navigation_labels, render_mission_header, render_overview,
+    render_ledgers, render_methods,
+)
 from src.explorer_filters import filter_flex_records
-from src.explorer_charts import sample_category_counts
+from src.chart_presentation import make_count_chart
 from src.ranking import search_and_rank_flex
 from src.verification_ui import render_verification_panel
+from src.i18n import display_code, init_language, ranking_reason, source_note, qc_flags_text, tr
 
 
 RELEASE_DIR = (
@@ -22,107 +29,127 @@ RELEASE_DIR = (
 )
 
 NASA_REPORT_URL = "https://ntrs.nasa.gov/citations/20150023456"
+BASS_RELEASE_DIR = Path(__file__).resolve().parent / "data" / "releases" / BASS_RELEASE_ID
 
 
 def main() -> None:
     st.set_page_config(
-        page_title="VERGE-NASA Edition",
-        page_icon="🚀",
+        page_title="VERGE — NASA Edition",
+        page_icon="🛰️",
         layout="wide",
     )
 
-    st.title("VERGE-NASA Edition")
-    st.caption("Stellar Anvil | NASA Space Apps Challenge 2026")
-    st.subheader("NASA Evidence Explorer — FLEX")
+    # Language and original widget keys remain stable across both locales.
+    language = init_language(st.session_state)
+    st.sidebar.radio(
+        tr("language", language),
+        ("en", "ru"),
+        key="ui_language",
+        format_func=lambda code: "English" if code == "en" else "Русский",
+        horizontal=True,
+    )
+    language = st.session_state["ui_language"]
 
-    # Load and validate the bounded D7 scientific release.
+    # A failed FLEX D7 validation must never lead to a misleading dashboard.
     try:
         records = load_flex_d7_release(RELEASE_DIR)
     except (OSError, ValueError, KeyError) as exc:
-        st.error("FLEX D7 release validation failed. No data displayed.")
+        st.error(tr("load_failed", language))
         st.code(str(exc))
         st.stop()
         return
 
-    # Display record counts, not scientific quality scores.
-    statuses = records["qc_dap_d4_record_status"].value_counts()
+    render_mission_header(language)
 
-    total_col, verified_col, review_col = st.columns(3)
-
-    total_col.metric("Source-linked records", len(records))
-    verified_col.metric(
-        "Verified for point lookup",
-        int(statuses.get("VERIFIED", 0)),
-    )
-    review_col.metric(
-        "Require review",
-        int(statuses.get("REVIEW", 0)),
+    # All tabs render on every rerun, preserving existing Streamlit widget
+    # keys and session ledgers when visitors switch pages or language.
+    overview_tab, explore_tab, search_tab, verify_tab, ledger_tab, methods_tab = st.tabs(
+        navigation_labels(language)
     )
 
-    st.caption(
-        f"Data release: {RELEASE_ID} | "
-        "NASA/TP-2015-216046, Table IX"
-    )
+    with overview_tab:
+        render_overview(records, BASS_RELEASE_DIR, language)
 
-    st.info(
-        "This is a bounded, read-only scientific sample. "
-        "QC status does not establish causal relationships, "
-        "safety thresholds, or predictions."
-    )
+    with explore_tab:
+        st.subheader(tr("explorer", language))
+        st.info(tr("bounded_warning", language))
+        render_flex_explorer(records, language)
+        st.divider()
+        render_bassii_card(BASS_RELEASE_DIR, language=language, include_verification=False)
 
-    # R3.3 — Independent evidence search across the full D7 release.
-    render_evidence_search(records)
+    with search_tab:
+        render_evidence_search(records, language)
 
-    # R4.6 — Independently verified, source-linked structured claims.
-    render_verification_panel(records, RELEASE_DIR)
+    with verify_tab:
+        flex_tab, bass_tab = st.tabs([
+            tr("mc_flex_tab", language), tr("mc_bass_tab", language)
+        ])
+        with flex_tab:
+            render_verification_panel(records, RELEASE_DIR, language=language, show_ledger=False)
+        with bass_tab:
+            render_bassii_verification(BASS_RELEASE_DIR, language=language, show_ledger=False)
 
+    with ledger_tab:
+        render_ledgers(language)
+
+    with methods_tab:
+        render_methods(language)
+
+
+def render_flex_explorer(records, language: str = "en") -> None:
+    """Original source-linked FLEX filters, charts and record inspection."""
     # R2.2 — Interactive filters for source-linked experiments.
-    st.subheader("Filter experiments")
+    st.subheader(tr("filter_heading", language))
 
     search_col, fuel_col = st.columns([2, 1])
 
     with search_col:
         test_id_query = st.text_input(
-            "Search by experiment ID",
-            placeholder="e.g. FLEX-034",
+            tr("search_id", language),
+            placeholder=tr("id_example", language),
+            key="r2_test_id_query",
         )
 
     with fuel_col:
         selected_fuels = st.multiselect(
-            "Fuel",
+            tr("fuel", language),
             options=sorted(records["fuel_raw"].unique().tolist()),
+            format_func=lambda value: display_code(value, language),
+            key="r2_fuels",
         )
 
     oxygen_col, outcome_col, qc_col = st.columns(3)
 
     with oxygen_col:
         selected_oxygen = st.multiselect(
-            "O₂ mole fraction (normalized)",
+            tr("oxygen_norm", language),
             options=sorted(
                 records[
                     "curated_oxygen_mole_fraction"
                 ].unique().tolist()
             ),
-            help=(
-                "Uses audited normalized text for filtering. "
-                "Original NASA strings remain unchanged."
-            ),
+            help=tr("normalized_help", language),
+            key="r2_oxygen",
         )
 
     with outcome_col:
         selected_outcomes = st.multiselect(
-            "Reported test end",
+            tr("test_end", language),
             options=sorted(records["test_end_raw"].unique().tolist()),
+            format_func=lambda value: display_code(value, language),
+            key="r2_outcomes",
         )
 
     with qc_col:
         selected_qc = st.multiselect(
-            "D4 QC status",
+            tr("d4_status", language),
             options=sorted(
                 records[
                     "qc_dap_d4_record_status"
                 ].unique().tolist()
             ),
+            format_func=lambda value: display_code(value, language),
+            key="r2_qc",
         )
 
     # Reuse the independently tested R2.1 filter.
@@ -135,24 +162,23 @@ def main() -> None:
         qc_statuses=selected_qc,
     )
 
-    st.caption(
-        f"Showing {len(filtered_records)} of {len(records)} "
-        "audited FLEX records. "
-        "Empty filter selections mean 'all'."
-    )
+    st.caption(tr(
+        "filter_count", language,
+        selected=len(filtered_records), total=len(records),
+    ))
 
     # Source-linked overview.
     display_columns = {
-        "flex_test_id": "Test ID",
-        "fuel_raw": "Fuel (raw)",
-        "oxygen_mole_fraction_raw": "O₂ mole fraction (raw)",
-        "ambient_pressure_mmhg_raw": "Pressure (raw, mmHg)",
+        "flex_test_id": tr("test_id", language),
+        "fuel_raw": tr("fuel_raw", language),
+        "oxygen_mole_fraction_raw": tr("oxygen_raw", language),
+        "ambient_pressure_mmhg_raw": tr("pressure_raw", language),
         "visible_flame_extinction_diameter_mm_raw": (
-            "Droplet diameter at visible flame extinction (raw, mm)"
+            tr("extinction_raw", language)
         ),
-        "test_end_raw": "Reported test end",
-        "qc_dap_d4_record_status": "D4 QC status",
-        "source_anchor": "NASA source locator",
+        "test_end_raw": tr("test_end", language),
+        "qc_dap_d4_record_status": tr("d4_status", language),
+        "source_anchor": tr("source_locator", language),
     }
 
     st.dataframe(
@@ -164,80 +190,42 @@ def main() -> None:
     )
 
     if filtered_records.empty:
-        st.warning(
-            "No experiments match the selected filters. "
-            "Try changing or clearing your selections."
-        )
-        st.stop()
+        st.warning(tr("empty_filter", language))
+        return
 
     # R2.3 — Descriptive counts for selected D7 records.
-    st.subheader("Audited sample composition")
+    st.subheader(tr("composition", language))
 
-    st.caption(
-        f"Showing categorical counts for {len(filtered_records)} "
-        f"selected records out of {len(records)} in the bounded "
-        f"FLEX D7 sample ({RELEASE_ID}). "
-        "These counts are not representative of all FLEX tests. "
-        "No causal comparison or physical prediction is implied."
+    st.caption(tr(
+        "composition_warning", language,
+        selected=len(filtered_records), total=len(records), id=RELEASE_ID,
+    ))
+
+    # R2 charts: compact labels and zero-based count axes for EN/RU.
+    chart_fields = (
+        "fuel_raw",
+        "test_end_raw",
+        "qc_dap_d4_record_status",
     )
-
-    chart_definitions = (
-        ("fuel_raw", "Fuel"),
-        ("test_end_raw", "Reported test end"),
-        ("qc_dap_d4_record_status", "D4 QC status"),
-    )
-
     chart_columns = st.columns(3)
 
-    for chart_column, (field, chart_title) in zip(
-        chart_columns,
-        chart_definitions,
-    ):
-        counts = sample_category_counts(
-            filtered_records,
-            field,
-        )
-
-        figure = px.bar(
-            counts,
-            x="category",
-            y="sample_records",
-            text="sample_records",
-            title=chart_title,
-            labels={
-                "category": chart_title,
-                "sample_records": "Audited records",
-            },
-        )
-
-        figure.update_yaxes(
-            rangemode="tozero",
-        )
-
-        figure.update_layout(
-            showlegend=False,
-            margin=dict(
-                l=10,
-                r=10,
-                t=45,
-                b=10,
-            ),
-        )
-
+    for chart_column, field in zip(chart_columns, chart_fields):
+        figure = make_count_chart(filtered_records, field, language)
         with chart_column:
             st.plotly_chart(
                 figure,
                 use_container_width=True,
-                key=f"d7_count_{field}",
+                key=f"d7_count_v2_{field}",
             )
 
     st.divider()
-    st.subheader("Inspect a source record")
+    st.subheader(tr("inspect_record", language))
 
     # Allow inspection of individual experiments.
     chosen_id = st.selectbox(
-        "Experiment ID",
+        tr("experiment_id", language),
         options=filtered_records["flex_test_id"].tolist(),
+        key="r2_selected_id",
     )
 
     record = filtered_records.set_index(
@@ -248,87 +236,77 @@ def main() -> None:
     status = record["qc_dap_d4_record_status"]
 
     if status == "REVIEW":
-        st.warning(
-            "REVIEW — unresolved source or interpretation "
-            "limitations apply."
-        )
+        st.warning(tr("review_warning", language))
     else:
-        st.info(
-            "VERIFIED for limited source-point lookup "
-            "and display only."
-        )
+        st.info(tr("verified_warning", language))
 
     # Show exact provenance and scientific restrictions.
     st.write(
-        "**Source locator:**",
+        f"**{tr('source_anchor', language)}:**",
         record["source_anchor"],
     )
 
     st.write(
-        "**NASA original report:**",
+        f"**{tr('original_report', language)}:**",
         NASA_REPORT_URL,
     )
 
     st.write(
-        "**Appendix B locator:**",
-        record["qc_appendix_b_anchor"] or "Not recorded",
+        f"**{tr('figure_locator', language)}:**",
+        record["qc_appendix_b_anchor"] or tr("not_recorded", language),
     )
 
     st.write(
-        "**Permitted uses:**",
-        record["qc_permitted_uses"],
+        f"**{tr('permitted_uses', language)}:**",
+        source_note(record["qc_permitted_uses"], language),
     )
 
     st.write(
-        "**Blocked uses:**",
-        record["qc_blocked_uses"],
+        f"**{tr('blocked_uses', language)}:**",
+        source_note(record["qc_blocked_uses"], language),
     )
 
     st.write(
-        "**QC flags:**",
-        record["qc_qc_flags"] or "None recorded",
+        f"**{tr('qc_flags', language)}:**",
+        qc_flags_text(record["qc_qc_flags"], language) or tr("none_recorded", language),
     )
 
     st.write(
-        "**Review reason:**",
-        record["qc_review_reason"] or "None recorded",
+        f"**{tr('review_reason', language)}:**",
+        source_note(record["qc_review_reason"], language)
+        or tr("none_recorded", language),
     )
 
     # Display source strings without numerical conversion.
-    st.markdown(
-        "**Field-level restrictions and raw value preservation**"
-    )
+    st.markdown(f"**{tr('field_limits', language)}**")
 
     st.write(
-        "Pressure (raw mmHg):",
+        tr("pressure_field", language) + ":",
         repr(record["ambient_pressure_mmhg_raw"]),
-        "| Blocked:",
+        f"| {tr('blocked', language)}:",
         record["curated_pressure_field_blocked"],
     )
 
     st.write(
-        "Extinction droplet diameter (raw mm):",
+        tr("extinction_field", language) + ":",
         repr(
             record["visible_flame_extinction_diameter_mm_raw"]
         ),
-        "| Curated text:",
+        f"| {tr('curated_text', language)}:",
         repr(
             record[
                 "curated_visible_flame_extinction_droplet_diameter_mm"
             ]
         ),
-        "| Blocked:",
+        f"| {tr('blocked', language)}:",
         record["curated_extinction_diameter_field_blocked"],
     )
 
-    st.caption(
-        "Quoted values distinguish literal '0', "
-        "missing '–', and empty ''."
-    )
+    st.caption(tr("quoted_note", language))
 
     # Full raw record for source-level inspection.
     with st.expander(
-        "Original NASA Table IX row — unchanged strings"
+        tr("raw_row", language)
     ):
         raw_columns = [
             "flex_test_id",
@@ -359,74 +337,73 @@ def main() -> None:
             name: record[name]
             for name in raw_columns
         })
+        # Original QC narratives stay accessible in English.
+        if language == "ru":
+            with st.expander(tr("source_note_english", language)):
+                st.write(record["qc_review_reason"])
+                st.write(record["qc_permitted_uses"])
+                st.write(record["qc_blocked_uses"])
 
 
-def render_evidence_search(records) -> None:
+def render_evidence_search(records, language: str = "en") -> None:
     """Display source-linked deterministic FLEX metadata search."""
 
     st.divider()
-    st.subheader("Evidence Search — FLEX D7")
+    st.subheader(tr("evidence_search", language))
 
-    st.caption(
-        "Literal keyword search across 17 audited records. "
-        "All query terms must match within one record. "
-        "Ranking is lexical relevance, not scientific confidence "
-        "or verification."
-    )
+    st.caption(tr("search_help", language))
 
     query = st.text_input(
-        "Search experiment and QC metadata",
-        placeholder="e.g. FLEX-034 or Heptane VERIFIED",
+        tr("search_meta", language),
+        placeholder=tr("search_placeholder", language),
         key="r3_evidence_query",
     )
 
     if not query.strip():
-        st.caption(
-            "Enter one or more search terms to inspect "
-            "NASA-linked records."
-        )
+        st.caption(tr("search_intro", language))
         return
 
     results = search_and_rank_flex(records, query)
 
     if results.empty:
-        st.info(
-            "No matching records in the bounded FLEX D7 release."
-        )
+        st.info(tr("search_empty", language))
         return
 
-    st.caption(
-        f"{len(results)} matching record(s) from the "
-        f"{len(records)}-record {RELEASE_ID} release."
-    )
+    st.caption(tr(
+        "search_count", language,
+        count=len(results), total=len(records), id=RELEASE_ID,
+    ))
 
     display_columns = {
-        "ranking_position": "Rank",
-        "flex_test_id": "Experiment ID",
-        "fuel_raw": "Fuel (raw)",
-        "test_end_raw": "Reported outcome",
-        "ranking_relevance_score": "Lexical score",
-        "ranking_reasons": "Why matched",
-        "qc_dap_d4_record_status": "D4 QC",
-        "source_anchor": "NASA source locator",
+        "ranking_position": tr("rank", language),
+        "flex_test_id": tr("experiment_id", language),
+        "fuel_raw": tr("fuel_raw", language),
+        "test_end_raw": tr("outcome", language),
+        "ranking_relevance_score": tr("lexical_score", language),
+        "ranking_reasons": tr("why_matched", language),
+        "qc_dap_d4_record_status": tr("d4_qc", language),
+        "source_anchor": tr("source_locator", language),
     }
 
+    ranked_display = results[list(display_columns)].copy(deep=True)
+    ranked_display["ranking_reasons"] = ranked_display["ranking_reasons"].map(
+        lambda text: ranking_reason(text, language)
+    )
+    for raw_column in ("test_end_raw", "qc_dap_d4_record_status", "fuel_raw"):
+        if raw_column in ranked_display.columns:
+            ranked_display[raw_column] = ranked_display[raw_column].map(
+                lambda value: display_code(value, language)
+            )
     st.dataframe(
-        results[list(display_columns)].rename(
-            columns=display_columns
-        ),
+        ranked_display.rename(columns=display_columns),
         hide_index=True,
         use_container_width=True,
     )
 
-    st.caption(
-        "Lexical scores are relative search weights, "
-        "not percentages, reliability estimates, "
-        "fire-risk scores or NASA-EVP verdicts."
-    )
+    st.caption(tr("rank_caveat", language))
 
     chosen_id = st.selectbox(
-        "Inspect ranked result",
+        tr("inspect_ranked", language),
         options=results["flex_test_id"].tolist(),
         key="r3_selected_evidence_id",
     )
@@ -439,88 +416,87 @@ def render_evidence_search(records) -> None:
 
     if chosen["qc_dap_d4_record_status"] == "REVIEW":
         st.warning(
-            "D4 REVIEW — "
-            + (
-                chosen["qc_review_reason"]
-                or "Review restrictions apply."
-            )
+            tr("d4_review_detail", language) + " "
+            + source_note(chosen["qc_review_reason"], language)
         )
     else:
-        st.info(
-            "D4 VERIFIED for limited point lookup only."
-        )
+        st.info(tr("d4_verified_detail", language))
 
     st.write(
-        "**Ranking explanation:**",
-        chosen["ranking_reasons"],
+        f"**{tr('ranking_explanation', language)}:**",
+        ranking_reason(chosen["ranking_reasons"], language),
     )
 
     st.write(
-        "**NASA source locator:**",
+        f"**{tr('source_locator', language)}:**",
         chosen["source_anchor"],
     )
 
     st.write(
-        "**Table IX reference:**",
-        f"printed p.{chosen['printed_page']}; "
-        f"PDF p.{chosen['pdf_page_1based']}",
+        f"**{tr('table_reference', language)}:**",
+        tr("printed_pdf", language,
+           printed=chosen["printed_page"], pdf=chosen["pdf_page_1based"]),
     )
 
     st.write(
-        "**Original NASA report:**",
+        f"**{tr('original_report', language)}:**",
         NASA_REPORT_URL,
     )
 
-    with st.expander("Source values and QC restrictions"):
+    with st.expander(tr("source_qc_expander", language)):
         st.write(
-            "**Fuel (raw):**",
+            f"**{tr('fuel_raw', language)}:**",
             chosen["fuel_raw"],
         )
 
         st.write(
-            "**Oxygen mole fraction (raw; dimensionless):**",
+            f"**{tr('oxygen_source', language)}:**",
             repr(chosen["oxygen_mole_fraction_raw"]),
         )
 
         st.write(
-            "**Ambient pressure (raw; mmHg):**",
+            f"**{tr('ambient_source', language)}:**",
             repr(chosen["ambient_pressure_mmhg_raw"]),
-            "| Blocked:",
+            f"| {tr('blocked', language)}:",
             chosen["curated_pressure_field_blocked"],
         )
 
         st.write(
-            "**Droplet diameter at visible flame extinction "
-            "(raw; mm):**",
+            f"**{tr('visible_source', language)}:**",
             repr(
                 chosen[
                     "visible_flame_extinction_diameter_mm_raw"
                 ]
             ),
-            "| Blocked:",
+            f"| {tr('blocked', language)}:",
             chosen["curated_extinction_diameter_field_blocked"],
         )
 
         st.write(
-            "**Permitted uses:**",
-            chosen["qc_permitted_uses"],
+            f"**{tr('permitted_uses', language)}:**",
+            source_note(chosen["qc_permitted_uses"], language),
         )
 
         st.write(
-            "**Blocked uses:**",
-            chosen["qc_blocked_uses"],
+            f"**{tr('blocked_uses', language)}:**",
+            source_note(chosen["qc_blocked_uses"], language),
         )
 
         st.write(
-            "**QC flags:**",
-            chosen["qc_qc_flags"] or "None recorded",
+            f"**{tr('qc_flags', language)}:**",
+            qc_flags_text(chosen["qc_qc_flags"], language) or tr("none_recorded", language),
         )
 
         st.write(
-            "**Audited figure locator:**",
+            f"**{tr('audited_figure', language)}:**",
             chosen["qc_appendix_b_anchor"]
-            or "Not recorded in this release",
+            or tr("not_in_release", language),
         )
+        if language == "ru":
+            with st.expander(tr("source_note_english", language)):
+                st.write(chosen["qc_review_reason"])
+                st.write(chosen["qc_permitted_uses"])
+                st.write(chosen["qc_blocked_uses"])
 
 
 if __name__ == "__main__":
