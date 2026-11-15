@@ -28,6 +28,30 @@ Open the [public dashboard](https://verge-microgravity.streamlit.app/) in a brow
 
 Another useful example is **Search → FLEX-034**, whose source table and figure caption are not fully reconciled; the interface retains its `REVIEW` status rather than treating it as an ordinary physical measurement.
 
+## One-click Windows launch (prepared environment)
+
+Windows users who already prepared the repository and its `.venv` can start the **full local dashboard** by double-clicking **[`Start_VERGE.cmd`](Start_VERGE.cmd)** in File Explorer. **VS Code and manual PowerShell commands are not required for daily use.** Keep the launcher beside `app.py` in the project root. The application should open in your default browser at **http://127.0.0.1:8527**.
+
+**First-time setup (once per checkout):** this launcher is **not** a portable, self-contained EXE. It requires Python 3.12 and an existing project-local virtual environment with the dependencies installed. From the repository root, prepare them if needed:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-gemini.txt
+```
+
+`requirements-gemini.txt` installs the ordinary dashboard requirements plus the optional Google Gemini SDK. The launcher itself **never installs or upgrades packages**, never changes PowerShell execution policy, and never stores an API key.
+
+**Using and closing the launcher:**
+
+1. Double-click `Start_VERGE.cmd` in Windows Explorer. Leave its command window open while using VERGE. It starts Streamlit on **`127.0.0.1:8527` only** and enables the local Gemini panel in **Search → AI Evidence Interpretation**.
+2. For a live Gemini draft, select FLEX or BASS-II evidence, enter your **own Google Gemini API key** in the local password field and submit a question; an Internet connection is required. No key is needed for the deterministic dashboard. Gemini text remains `CANDIDATE_NOT_VERIFIED`, never a scientific verdict.
+3. Closing the **browser tab does not stop the server**. To reopen VERGE while the console window is still running, simply visit **http://127.0.0.1:8527**; do not double-click the launcher again.
+4. To stop the server, return to the command window and press **Ctrl+C**. If Windows asks whether to terminate the batch job, confirm with **Y**. Once it exits, the launcher can be run again.
+
+**Common diagnostics:** if the launcher reports **`Port 8527 is already in use`**, an existing local process is listening on that port; try the URL above if it is your VERGE server. Otherwise identify and stop your own server safely before retrying. The launcher **never kills another process**. If `.venv\Scripts\python.exe` or required libraries are missing, it displays an error instead of installing anything silently; install dependencies in that project's `.venv` first. Missing Gemini SDK or credentials must not block FLEX/BASS-II deterministic exploration and verification.
+
+**Distribution boundary:** this is a one-click launcher **for an already prepared Windows machine**. A fresh computer still needs Python and dependency setup; no standalone portable package is claimed. The public [Streamlit dashboard](https://verge-microgravity.streamlit.app/) does **not** use this `.cmd` or expose the live Gemini form. See [deployment guidance](docs/DEPLOYMENT.md) for the manual launch and verification path.
+
 ## Actual scientific coverage
 
 - **FLEX / PSI-69:** 17 selected liquid-fuel droplet records from NASA/TP-2015-216046, Table IX. D4 source-data review: **10 `VERIFIED` / 7 `REVIEW`**. This is a bounded sample, not the complete investigation.
@@ -41,6 +65,8 @@ Another useful example is **Search → FLEX-034**, whose source table and figure
 Model uncertainty is **not reported**, not zero. Differences between Table 2.1 and discussion in §2.2.5 remain unresolved. FLEX droplet observables must not be quantitatively combined with BASS-II solid-fuel findings. See [SOURCES.md](SOURCES.md) for precise attribution and known quality issues.
 
 ## Optional local Gemini candidate interpretation (R6)
+
+For a prepared Windows setup, the recommended launch path is **[`Start_VERGE.cmd`](Start_VERGE.cmd)** as described above. The commands below are the **manual PowerShell alternative** (and also show how to prepare a new `.venv`).
 
 The public code contains `src/gemini_candidate.py`, `src/gemini_evidence.py`, and `src/gemini_panel.py`. **Live Gemini is deliberately hidden from the public Streamlit deployment.** To use it on a trusted local computer:
 
