@@ -1,7 +1,7 @@
 # VERGE — Public deployment and local Gemini operation
 
 **Document updated:** 15 November 2026.
-**Observed published baseline:** GitHub `main` at [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb), app at https://verge-microgravity.streamlit.app/.
+**R9 observed published baseline:** GitHub `main` at [`855f4bb`](https://github.com/31101995sa-ui/verge/commit/855f4bbf9e0cf6620b29964fc4a9dff8f16f4d55) (R8.1 docs/launcher). **Scientific R6 code milestone:** [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb). App: https://verge-microgravity.streamlit.app/.
 **Public capability:** deterministic Streamlit dashboard; **Gemini execution is gated to trusted localhost**.
 
 ## 1. Reproducing the public baseline
@@ -25,7 +25,7 @@ python -m benchmarks.run_bassii_benchmark --output "$env:TEMP\verge_bassii_obser
 python -m streamlit run app.py
 ```
 
-These are reproducibility commands. The participant previously observed **237 passed** and **18/18 + 10/10** before publication of R6; a **fresh clean-clone full-suite rerun after `d041cbe` remains to be observed**. Both active D7 validators also passed independently in the reviewed archive. Do not label an unexecuted cloud-side test as PASS.
+These are reproducibility commands, not a claim they were executed on every computer. The participant observed **237 passed** and **18/18 + 10/10** in Windows R6. The subsequent R9 cold audit reported **237/237 Pytest PASS**, both scientific benchmarks, both active D7 validators and Python compilation PASS in a clean checkout reconstructed from archived Git history at `855f4bb`. **A fresh GitHub network clone and cloud-side test run were not independently observed**. Do not label those unexecuted checks as PASS.
 
 `data/releases/*/*` and `data/audit/*` are byte-preserved by `.gitattributes` (`-text`). Do not normalize CRLF/LF in these source-locked files, edit D7 manifests to match altered payloads, or change frozen benchmark expectations.
 
@@ -40,9 +40,11 @@ These are reproducibility commands. The participant previously observed **237 pa
 
 After any docs-only commit, Streamlit Cloud may redeploy; inspect build status and perform a quick public smoke test in a private browser. New public users must not be required to enter a Gemini API key. The app may take time to wake from host inactivity; a loading delay alone is not proof of broken code.
 
-## 3. Local-only live Gemini demonstration
+## 3. Local one-click launch and Gemini demonstration
 
-Run only from a trusted local development environment:
+On a **prepared Windows computer** with a project-local `.venv` and installed dependencies, double-click [`Start_VERGE.cmd`](../Start_VERGE.cmd) beside `app.py`. It starts Streamlit at **`127.0.0.1:8527`**, activates the localhost-only Gemini panel, and opens the default browser. Keep its console window open; closing the browser does not stop the server. Press **Ctrl+C** in the launcher window to stop it. If port `8527` is occupied, reopen your existing VERGE URL if that is your server, or close your own server safely before retrying. The launcher never terminates unrelated processes, installs packages, stores credentials, or provides a portable EXE. Missing Gemini SDK/credentials do not disable deterministic verification.
+
+**Manual PowerShell fallback** (trusted local environment only):
 
 ```powershell
 python -m pip install -r requirements-gemini.txt

@@ -10,7 +10,7 @@
 - Challenge: https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/
 - Submission instructions: https://www.spaceappschallenge.org/resources/project-submission-guide/
 - Official event schedule states **15 November 2026, 23:59 in the team's registered Local Event timezone** for the Project tab. For an Almaty-registered team, that is 23:59 Asia/Almaty; **the participant must check actual team/event settings**. GitHub and Streamlit publication are **not** submission.
-- Local judging and eligibility: verify the actual Local Event, solo participation status, presentation slot, language/duration and any earlier material hand-in. An organizer channel mentioned offline assessment starting at 15:00 in Almaty, but that does not establish this participant's own slot.
+- Local judging and eligibility: the participant reports confirming a **15:00 Asia/Almaty local deadline/milestone** with organizers; the global online cutoff is **23:59 Asia/Almaty** for an Almaty-registered event. Verify the actual Local Event, solo participation, individual speaking slot, language/duration and any materials hand-in in the participant account. The exact individual slot and formal status were not independently inspected here.
 - Seven-slide presentation and Russian script are **reported prepared by the participant**; final files, hyperlinks and access have **not** been reviewed in this documentation pass.
 
 ## Required challenge Resources — OPEN, high priority
@@ -40,7 +40,7 @@ Global Awards requirements described by the official Space Apps GO Team call for
 ## Public distribution / reproducibility
 
 - [Live dashboard](https://verge-microgravity.streamlit.app/) and [GitHub](https://github.com/31101995sa-ui/verge) published.
-- Published R6 code commit: [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb). The local R6 suite ran **237 passed** and both D7 validators and 18/18+10/10 benchmarks passed. Earlier public test failure on two historic FLEX CSVs prompted a byte-preserving Git correction in this commit. **A fresh public clone/full-test rerun after this correction is still to be recorded**.
+- R9 GitHub baseline observed: [`855f4bb`](https://github.com/31101995sa-ui/verge/commit/855f4bbf9e0cf6620b29964fc4a9dff8f16f4d55). Historical R6 code + byte-exact legacy FLEX CSV fix: [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb). The participant's R6 Windows run passed **237/237**, both D7 checks and **18/18 + 10/10** benchmarks. R9 cold audit also reported the same scientific checks and full pytest PASS on a clean checkout recreated from archive `(9).rar` Git history; **no fresh GitHub network clone or cloud-side pytest was independently performed**.
 - Repository `.gitignore` excludes common secrets, local `.venv` and raw PDFs; **review staged and tracked paths** because `.gitignore` cannot retroactively protect previously tracked secrets. Do not upload archives containing `.git`, `.venv`, or personal files.
 
 ## Closing state

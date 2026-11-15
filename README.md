@@ -99,7 +99,7 @@ python -m benchmarks.run_r4_benchmark --output "$env:TEMP\verge_flex_observed.js
 python -m benchmarks.run_bassii_benchmark --output "$env:TEMP\verge_bassii_observed.json"
 ```
 
-**Observed on the participant's Windows environment before the R6 commit:** **237/237 Pytest PASS**, **18/18 FLEX benchmark**, **10/10 BASS-II benchmark**, and both D7 validators PASS. The published commit [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb) includes R6 and the byte-exact fix for two historical FLEX CSVs. The **post-commit fresh-clone full suite remains a separate acceptance check**; do not equate the preceding local run with all future environments passing. Benchmark results describe predefined claim cases, **not universal scientific accuracy**.
+**Observed regression:** the participant's Windows R6 run produced **237/237 Pytest PASS**, **18/18 FLEX**, **10/10 BASS-II**, and both D7 validators PASS. The subsequent **R9 cold audit** reported **237/237 Pytest PASS**, the same structured benchmark scores, both D7 validators PASS, and Python compilation PASS in a clean checkout reconstructed from the archived Git history at [`855f4bb`](https://github.com/31101995sa-ui/verge/commit/855f4bbf9e0cf6620b29964fc4a9dff8f16f4d55). This was **not** an independent fresh network clone from GitHub or a cloud-runtime test. The earlier [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb) commit introduced R6 and the byte-exact fix for two historical FLEX CSVs. Benchmark results describe predefined claim cases, **not universal scientific accuracy**.
 
 ## Science and software boundaries
 
