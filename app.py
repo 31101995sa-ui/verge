@@ -19,7 +19,7 @@ from src.chart_presentation import make_count_chart
 from src.ranking import search_and_rank_flex
 from src.verification_ui import render_verification_panel
 from src.i18n import display_code, init_language, ranking_reason, source_note, qc_flags_text, tr
-
+from src.gemini_panel import render_gemini_local_panel
 
 RELEASE_DIR = (
     Path(__file__).resolve().parent
@@ -79,6 +79,11 @@ def main() -> None:
 
     with search_tab:
         render_evidence_search(records, language)
+        render_gemini_local_panel(
+        RELEASE_DIR,
+        BASS_RELEASE_DIR,
+        language,
+    )
 
     with verify_tab:
         flex_tab, bass_tab = st.tabs([
