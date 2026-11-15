@@ -1,77 +1,79 @@
-# Deploy VERGE (Streamlit Community Cloud)
+# VERGE — Public deployment and local Gemini operation
 
-**Status:** deployment procedure prepared; a real public deployment is **not yet verified**.
+**Document updated:** 15 November 2026.
+**Observed published baseline:** GitHub `main` at [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb), app at https://verge-microgravity.streamlit.app/.
+**Public capability:** deterministic Streamlit dashboard; **Gemini execution is gated to trusted localhost**.
 
-## 1. Freeze the local state
+## 1. Reproducing the public baseline
 
-From the project root on Windows PowerShell:
+The web app uses Python 3.12, `app.py` as entrypoint, `.streamlit/config.toml`, and runtime packages pinned in `requirements.txt` (Streamlit/pandas/Plotly). The GitHub repository includes both D7 releases; original heavyweight NASA PDFs are not required at runtime.
+
+From PowerShell on Windows:
 
 ```powershell
+# In a new location, for reproducibility rather than changing the working repo:
+git clone https://github.com/31101995sa-ui/verge.git
+cd verge
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements-dev.txt
 python -m pytest -q
-python -m benchmarks.run_r4_benchmark --output artifacts/r4_benchmark_v0.1.json
-python -m benchmarks.run_bassii_benchmark --output artifacts/r5_bassii_benchmark_v0.1.json
-python .\data\releases\FLEX-R1-SAMPLE-20261114-v1.0\FLEX_R1_D7_validation_check.py
-python .\data\releases\BASSII-R5-TABLE2_1-20261114-v1.0\BASS_II_R5_D7_validation_check_v1.py
-git status --short --untracked-files=all
+python data/releases/FLEX-R1-SAMPLE-20261114-v1.0/FLEX_R1_D7_validation_check.py
+python data/releases/BASSII-R5-TABLE2_1-20261114-v1.0/BASS_II_R5_D7_validation_check_v1.py
+python -m benchmarks.run_r4_benchmark --output "$env:TEMP\verge_flex_observed.json"
+python -m benchmarks.run_bassii_benchmark --output "$env:TEMP\verge_bassii_observed.json"
+python -m streamlit run app.py
 ```
 
-`requirements.txt` is for the web runtime (Streamlit, Pandas and Plotly). `requirements-dev.txt` installs it plus Pytest for the test environment. The standalone D7 validators rely on standard Python libraries and the checked release files. The original NASA PDFs and heavy offline parsing tools are not required at web runtime.
+These are reproducibility commands. The participant previously observed **237 passed** and **18/18 + 10/10** before publication of R6; a **fresh clean-clone full-suite rerun after `d041cbe` remains to be observed**. Both active D7 validators also passed independently in the reviewed archive. Do not label an unexecuted cloud-side test as PASS.
 
-The archived developer environment and the proposed deployment file may have different transitive packages. **A truly clean Python 3.12 installation is still required to confirm dependency resolution.**
+`data/releases/*/*` and `data/audit/*` are byte-preserved by `.gitattributes` (`-text`). Do not normalize CRLF/LF in these source-locked files, edit D7 manifests to match altered payloads, or change frozen benchmark expectations.
 
-**Critical Phase B.2 Git fix:** the archived `906e1ca` commit normalized the original CRLF bytes of two BASS-II CSVs, breaking the D7 manifest in a clean Git clone, despite passing in the developer working tree. The release package includes `.gitattributes` with `-text` for `data/releases/*/*` and `data/audit/*`. Before deployment stage the four unchanged canonical source CSV bytes listed in `INSTALL_M2.md` under these attributes; do not edit their contents. A **fresh Git clone must pass both D7 validators** before publication.
+## 2. Current Streamlit Cloud deployment
 
-## 2. Publish reviewed Git files only
+- **Repository:** https://github.com/31101995sa-ui/verge
+- **Branch:** `main`
+- **Entry:** `app.py`
+- **Runtime dependencies:** `requirements.txt`
+- **Public URL:** https://verge-microgravity.streamlit.app/
+- **Gemini:** no public credential is provisioned; manual local-only gate prevents rendering its UI on the cloud deployment with non-loopback bind address.
 
-Before publication, inspect staged paths (`git diff --cached --name-only`) and tracked files (`git ls-files`). Exclude `.env`, `.streamlit/secrets.toml`, virtual environments, raw NASA PDF sources, accidental local console files and any personal data. Verify `git log --format=fuller -3` if exposing a personal Git commit email is a concern.
+After any docs-only commit, Streamlit Cloud may redeploy; inspect build status and perform a quick public smoke test in a private browser. New public users must not be required to enter a Gemini API key. The app may take time to wake from host inactivity; a loading delay alone is not proof of broken code.
 
-Commit the deployment-readiness files and the four byte-preserved canonical scientific blobs separately from the tested R5/UI checkpoint. **First perform a clean-clone reproducibility test of that new commit.** Create a GitHub repository under an account you control, then connect the local checkout using the remote URL **actually provided by GitHub**. Do not publish or guess the remote URL before creating the repo.
+## 3. Local-only live Gemini demonstration
+
+Run only from a trusted local development environment:
 
 ```powershell
-# Example placeholders only — replace with the actual GitHub URL.
-git remote add origin <ACTUAL_GITHUB_REPOSITORY_URL>
-git push -u origin main
+python -m pip install -r requirements-gemini.txt
+$env:VERGE_ENABLE_GEMINI_LOCAL = "1"
+python -m streamlit run app.py --server.address 127.0.0.1 --server.port 8527
 ```
 
-The remote command is an example, not something to run before the repository exists. If `origin` already exists, inspect `git remote -v` instead of adding another remote.
+Open `http://127.0.0.1:8527` → Search → AI Evidence Interpretation. Select one study and 1–4 snippets. Enter a **personal Gemini API key locally** in the password field. The key is needed for each manually initiated provider call; it is **not** read from public Streamlit secrets. This local form is not an audited secure BYOK gateway. Do not live-share the password field, store keys in checked-in files, or claim complete post-call erasure. `google-genai==3.3.0` is an optional SDK pinned only by `requirements-gemini.txt`.
 
-## 3. Create the public Streamlit app
+The draft must show `CANDIDATE_NOT_VERIFIED` and exact source identifiers. If the API refuses/limits a request, the deterministic dashboard remains the primary fallback; do not conceal blocked responses or treat them as scientific failures.
 
-1. Sign in to https://share.streamlit.io/ using GitHub.
-2. Click **Create app** and choose the actual published repository.
-3. Branch: `main`; entrypoint: **`app.py`**.
-4. In **Advanced settings**, choose **Python 3.12** to match the intended runtime. Streamlit Cloud's default may change.
-5. Use the root `requirements.txt` and checked `.streamlit/config.toml`. No secrets need to be configured for the current deterministic app.
-6. Deploy, read the real build logs, and copy the **actual** `*.streamlit.app` URL only after it loads.
+## 4. Final public browser smoke checklist
 
-Source paths are rooted at `Path(__file__).resolve().parent` in the app, so the two versioned D7 release folders must be included in the committed repository unchanged. Do not use absolute Windows paths in the cloud.
+1. Open the live URL in a private browser with no credentials; verify Overview counts **17 FLEX** (10 VERIFIED / 7 REVIEW) and **6 BASS-II method cells**.
+2. Navigate six main tabs; change English/Russian display and confirm identifiers and units remain unchanged.
+3. Search `FLEX-034`; inspect the `REVIEW` and figure/table discrepancy, not a safety judgement.
+4. Verify FLEX-002 oxygen mole fraction **0.21** (`SUPPORTED` source transcription) and deliberately false **0.99** (`CONTRADICTED`), and inspect printed p.20 / PDF p.26 Table IX locator.
+5. Verify BASS-II experimental **10±5 mm/s** for 21% O₂; inspect Table 2.1 printed p.28 / PDF p.36 and uncertainty distinction.
+6. Open both Evidence Ledgers and inspect the session-only warning and JSON download controls.
+7. Ensure Gemini live input is **not visible on public Streamlit**; no public API key is needed.
+8. Recheck that the public `main` repository includes all three `src/gemini_*.py` files and optional dependency file, although live execution remains local only.
 
-## 4. Public smoke test (fresh session)
+The R8 independent reviewer already observed several public deterministic scenarios before R6 publication; repeating them now documents the latest deployed version.
 
-Open the public URL in a new private/incognito browser, without developer credentials. Confirm:
+## 5. Deployment and submission boundaries
 
-1. Overview shows FLEX **17** records (10 `VERIFIED`, 7 `REVIEW`), and BASS-II **6** method cells (not independent experiments).
-2. English is the default. Switching to Russian does not reset the chosen experiment or search text.
-3. Explore can select **FLEX-002**, display original raw oxygen data and NASA locator.
-4. Explore warns on **FLEX-034** and its figure conflict; a blocked datum is not treated as a reliable physical diameter.
-5. Search finds source-linked records and shows that lexical relevance is not a scientific verdict.
-6. Verify/FLEX accepts a supported bounded Table IX claim and rejects a deliberately incorrect numerical claim.
-7. BASS-II Explore separates experiment, numerical computation and theory; model uncertainty is not reported.
-8. Verify/BASS-II: 21% O₂ / experimental / **10±5 mm/s** is a literal source match; omitting the ±5 must not count as the same published cell.
-9. Evidence Ledger shows separate FLEX and BASS-II histories and JSON download controls.
-10. Methods & Limitations displays the unresolved Table 2.1 discrepancy and provenance links.
-11. Refresh/fresh session does not reveal another visitor's session ledger. In-session results may be lost after a reload.
-
-Treat failed cold startup, missing release files, broken links or missing QC notices as release blockers.
-
-## 5. Deployment fallback
-
-If cloud deployment fails and cannot be stabilized before release freeze, preserve the known-good local Streamlit server (`python -m streamlit run app.py`), take a short screen recording and screenshots, provide reproduction commands, and submit the required short demo/presentation. A Windows `.exe` is not required for this gate.
+The public app is not a guaranteed always-on service; keep the real slide screenshots/recording as presentation fallback. The **Project** page on the official Space Apps team site must be submitted separately before the applicable deadline; a GitHub/Streamlit URL is not an official submission receipt. Do not infer that a challenge-specific NASA Resources requirement is satisfied from NTRS/PSI links alone.
 
 ## References
 
-- [Streamlit Community Cloud — deployment](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy)
-- [App dependencies](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies)
-- [File organization](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/file-organization)
-- [NASA project submission guide](https://www.spaceappschallenge.org/resources/project-submission-guide/)
+- [Streamlit Community Cloud deployment guide](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy)
+- [Streamlit app dependencies](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies)
+- [2026 NASA Space Apps Challenge](https://www.spaceappschallenge.org/2026/)
+- [Challenge Resources](https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/?tab=resources)

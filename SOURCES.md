@@ -1,6 +1,6 @@
 # Scientific Sources and Provenance
 
-**Registry snapshot:** 14 November 2026 · **Project:** VERGE
+**Registry reviewed:** 15 November 2026 · **Project:** VERGE · **Public code:** [`d041cbe`](https://github.com/31101995sa-ui/verge/commit/d041cbec3d097d648b8f3970e1356120194c3dfb)
 **Authority:** Original NASA reports and source-linked versioned D7 releases, not LLM-generated explanations.
 
 ## Challenge and resource requirement
@@ -9,7 +9,7 @@
 - [Challenge Resources tab](https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/?tab=resources)
 - [Official project submission resources](https://www.spaceappschallenge.org/resources/project-submission-guide/)
 
-**Pending mandatory human check:** confirm **directly in the current challenge Resources tab** that at least one source actually used by VERGE belongs to that list. The presence of a NASA NTRS or PSI URL alone does not establish membership in the challenge's particular official Resources list. This is a Global Awards eligibility requirement. Do not close this item without documentary evidence.
+**PENDING — mandatory participant check before claiming Global Awards eligibility:** confirm **directly in the current challenge Resources tab** that at least one source actually used by VERGE belongs to that list, and record its exact listed title/URL and the actual connection to a VERGE D7 release. The presence of a NASA NTRS or PSI URL alone does not establish membership in the challenge's particular official Resources list. This is a Global Awards eligibility requirement. Do not close this item without documentary evidence.
 
 ## FLEX — PSI-69
 
@@ -60,3 +60,13 @@ Both D7 releases have source-specific manifests with SHA-256/size validation and
 NASA report records are authoritative for report metadata. PSI record/metadata CC0 labels, when present, do not override the permissions for linked publications, images or third-party materials. No original heavyweight NASA report PDFs, videos or official NASA marks are bundled for public distribution.
 
 Project-original source code is governed by its [Apache-2.0 license](LICENSE). The project is independent and not endorsed by NASA.
+
+## Release and AI interpretation provenance (15 November 2026)
+
+- Public GitHub: https://github.com/31101995sa-ui/verge, verified source commit `d041cbe`; public Streamlit: https://verge-microgravity.streamlit.app/.
+- The public website uses deterministic source/claim verification and does **not** execute Gemini. Optional local Gemini code is committed under `src/gemini_candidate.py`, `src/gemini_evidence.py`, and `src/gemini_panel.py`.
+- The local LLM receives only bounded, manifest-checked D7 snippets. It returns **candidate interpretation**, checked for JSON/citation identifiers and a conservative numerical-prose restriction — **not** independent semantic verification or an NASA-EVP verdict.
+- Historic audit CSVs under `data/audit/` were restored byte-for-byte in Git commit `d041cbe` after line-ending normalization was identified in an earlier public test. Active scientific D7 releases were not corrected or modified. A post-commit fresh-clone full test run should still be recorded.
+- Google Gemini (local only) and OpenAI ChatGPT (development assistance) are third-party software/services, **not** NASA evidence sources. Details in [AI disclosure](docs/AI_DISCLOSURE.md).
+
+**Open official mapping:** the project audit could not read the full 2026 challenge Resources tab. This document does not assert that the report/PSI links above have been confirmed on that list.
